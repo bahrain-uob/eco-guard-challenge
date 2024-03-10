@@ -23,7 +23,7 @@ export function DBStack({ stack, app }: StackContext) {
     // create db variable that will hold the RDS db construct
     var db:RDS
 
-    if (app.stage == "prod") {
+  /*  if (app.stage == "prod") {
         db = new RDS(stack, mainDBLogicalName, {
             engine: "mysql5.7",
             defaultDatabaseName: "maindb",
@@ -59,6 +59,6 @@ export function DBStack({ stack, app }: StackContext) {
             },
         });
     }
-
+*/
     return {table, db};
 }
