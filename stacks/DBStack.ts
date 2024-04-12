@@ -1,12 +1,11 @@
 import { Table, StackContext, RDS } from "sst/constructs";
-
 import * as rds from "aws-cdk-lib/aws-rds";
 import * as secretsManager from "aws-cdk-lib/aws-secretsmanager";
 import * as path from 'path';
 import { Fn } from "aws-cdk-lib";
 
 export function DBStack({ stack, app }: StackContext) {
-    
+ /*   
     // Create a DynamoDB table
     const table = new Table(stack, "Counter", {
         fields: {
@@ -14,7 +13,7 @@ export function DBStack({ stack, app }: StackContext) {
         },
         primaryIndex: { partitionKey: "counter" },
     });
-
+*/
     // Create an RDS database
     const mainDBLogicalName = "MainDatabase";
     // Define output/export attributes names
@@ -23,11 +22,11 @@ export function DBStack({ stack, app }: StackContext) {
     // create db variable that will hold the RDS db construct
     var db:RDS
 
-  /*  if (app.stage == "prod") {
+    if (app.stage == "prod") {
         db = new RDS(stack, mainDBLogicalName, {
             engine: "mysql5.7",
             defaultDatabaseName: "maindb",
-            migrations: [".","packages","db-migrations"].join(path.sep),
+            migrations: [".","packages","db-migrations",].join(path.sep),
         });
 
         // Export db secret arn and cluster identifier to be used by other stages
@@ -48,7 +47,7 @@ export function DBStack({ stack, app }: StackContext) {
         db = new RDS(stack, "ExistingDatabase", {
             engine: "mysql5.7",
             defaultDatabaseName: "maindb",
-            migrations: [".","packages","db-migrations"].join(path.sep),
+            migrations: [".","packages","db-migrations",].join(path.sep),
             cdk: {
                 cluster: rds.ServerlessCluster.fromServerlessClusterAttributes(stack, "ExistingCluster", {
                     // Import the existing cluster identifier from the exported value
@@ -59,6 +58,8 @@ export function DBStack({ stack, app }: StackContext) {
             },
         });
     }
-*/
-    return {table, db};
+
+    return {
+        //table,
+         db};
 }
