@@ -1,9 +1,11 @@
-import { DynamoDB } from "aws-sdk";
+//import { DynamoDB } from "aws-sdk";
+import { RDS } from "aws-sdk";
 import { Table } from "sst/node/table";
 
-const dynamoDb = new DynamoDB.DocumentClient();
+//const dynamoDb = new DynamoDB.DocumentClient();
 
 export async function main() {
+/*
   const getParams = {
     // Get the table name from the environment variable
     TableName: Table.Counter.tableName,
@@ -36,4 +38,33 @@ export async function main() {
     statusCode: 200,
     body: count,
   };
+
+*/
+
+// Accessing the RDS cluster object from the CDK stack
+const db = stack.db;
+
+// Example: Executing a query on the RDS cluster
+const secret = Secret.fromSecretCompleteArn(stack, "ExistingSecret", db.secretArn);
+const connection = await db.cluster.getConnection({
+  secret,
+  database: "maindb",
+  // Set other connection options if needed
+});
+
+try {
+  // Example: Executing a SELECT query on the RDS cluster
+  const [rows] = await connection.query("SELECT * FROM registered_cars");
+  console.log("Rows:", rows);
+} catch (error) {
+  console.error("Error:", error);
+} finally {
+  // Closing the database connection
+  connection.close();
+}
+
+return {
+  statusCode: 200,
+  body: "OK",
+};
 }
