@@ -1,47 +1,23 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import "./App.css";
+import HeatMap from "./HeatMap.tsx";
+import Login from "./Login.tsx";
+import ReactDOM from "react-dom/client";
+import { Route, Routes, BrowserRouter } from "react-router-dom";
+import Review from "./Review.tsx";
+import ListView from "./ListView.tsx";
 
-function App() {
-  const [count, setCount] = useState("")
-
-  function onClick() {
-    console.log(import.meta.env.VITE_API_URL);
-    fetch(import.meta.env.VITE_API_URL, {
-      method: "POST",
-    })
-      .then((response) => response.text())
-      .then(setCount);
-  }
-
+export default function App() {
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={onClick}>
-          count is {count ? count : "unknown"}
-        </button>
-        <p>
-          Muneera Edited <code>src/App.tsx</code> and save to test HMR
-        </p>
-        <h1>"EcoGuard is the best group ever" - Mohammed Alsaeed</h1>
-        <h2>Husain Was Here A Long Time Ago</h2>
-        <p>Yomna</p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/HeatMap" element={<HeatMap />} />
+        <Route path="/Review" element={<Review />} />
+        <Route path="/ListView" element={<ListView />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+const root = ReactDOM.createRoot(document.getElementById("root")!);
+root.render(<App />);
