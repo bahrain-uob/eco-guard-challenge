@@ -1,4 +1,3 @@
-import React from "react";
 import icon from "./assets/image 4.svg";
 function Header() {
   return (

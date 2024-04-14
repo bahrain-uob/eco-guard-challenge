@@ -1,5 +1,3 @@
-import * as React from "react";
-import Navbar from "./Navbar.tsx";
 import Header from "./Header.tsx";
 function ListView() {
   return (

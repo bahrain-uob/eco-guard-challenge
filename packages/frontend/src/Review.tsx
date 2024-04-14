@@ -1,4 +1,3 @@
-import * as React from "react";
 import Header from "./Header.tsx";
 import Navbar from "./Navbar.tsx";
 import street from "./assets/Rectangle 1386.png";
