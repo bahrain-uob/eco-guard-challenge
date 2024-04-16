@@ -2,11 +2,35 @@ import { Api, StackContext, use } from "sst/constructs";
 import { DBStack } from "./DBStack";
 import { CacheHeaderBehavior, CachePolicy } from "aws-cdk-lib/aws-cloudfront";
 import { Duration } from "aws-cdk-lib/core";
+import { Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
+import * as iam from "aws-cdk-lib/aws-iam";
 
 export function ApiStack({ stack }: StackContext) {
 
     const {db} = use(DBStack);
-    
+
+    // Create a Role with service Principal Lambda
+    const lambdaToRDSRole = new iam.Role(this, "lambdaToRDSRole", {
+    assumedBy: new iam.ServicePrincipal("lambda.amazonaws.com"),
+    });
+
+    // Path to your Lambda function handler
+    const lambdaHandlerPath = 'packages/functions/src/sample-python-lambda/checkCarRegistration.py';
+
+   // Attach Inline Policies to role created by lambda in previous step.
+   lambdaToRDSRole.attachInlinePolicy(
+    new iam.Policy(this, "lambdaToRD", {
+      statements: [
+        new iam.PolicyStatement({
+           //Effect: "Allow",
+           actions: ["cloudformation:DescribeStacks"],
+           resources: ["*"],
+        }),
+      ],
+    })
+  );
+  
+
     // Create the HTTP API
     const api = new Api(stack, "Api", {
         defaults: {
@@ -22,13 +46,17 @@ export function ApiStack({ stack }: StackContext) {
             "GET /": {
                 function: {
                     handler: "packages/functions/src/sample-python-lambda/lambda.main",
+                    //handler: "packages/functions/src/sample-python-lambda/checkCarRegistration.lambda_handler",  ///to check if the car registered or not
+
                     runtime: "python3.11",
                     timeout: "60 seconds",
-                }
+                    // Set the IAM role for the checkCarRegistration.py" Lambda function
+                    //role: lambdaToRDSRole    // allow checkCarRegistration.py function to assume the role 
+                },
             },
+            
         }
     });
-
     // cache policy to use with cloudfront as reverse proxy to avoid cors
     // https://dev.to/larswww/real-world-serverless-part-3-cloudfront-reverse-proxy-no-cors-cgj
     const apiCachePolicy = new CachePolicy(stack, "CachePolicy", {
@@ -42,5 +70,5 @@ export function ApiStack({ stack }: StackContext) {
         ),
     });
 
-    return {api, apiCachePolicy}
+    return {api,apiCachePolicy}
 }
