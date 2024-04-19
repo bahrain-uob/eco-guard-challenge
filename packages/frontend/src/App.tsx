@@ -14,6 +14,7 @@ export default function App() {
         <Route path="/HeatMap" element={<HeatMap />} />
         <Route path="/Review" element={<Review />} />
         <Route path="/ListView" element={<ListView />} />
+        <Route path="/Review//ListView" element={<ListView />} />
       </Routes>
     </BrowserRouter>
   );
