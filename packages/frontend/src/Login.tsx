@@ -1,16 +1,17 @@
-import icon from "./assets/react.svg";
+import icon from "./assets/image 4.svg";
 function Login() {
   return (
     <div className="flex justify-center items-center px-16 py-20 bg-zinc-100 bg-opacity-90 max-md:px-5">
       <div className="mt-10 w-full max-w-[1012px] max-md:max-w-full">
         <div className="flex gap-5 max-md:flex-col max-md:gap-0">
-          <div className="flex flex-col w-[35%] max-md:ml-0 max-md:w-full">
-            <img
-              loading="lazy"
-              srcSet={icon}
-              className="mt-20 w-full aspect-[0.88] max-md:mt-10"
-            />
-          </div>
+        <div className="flex flex-col w-[35%] max-md:ml-0 max-md:w-full">
+  <img
+    loading="lazy"
+    src={icon}
+    className="justify-self-center object-cover w-250 h-200"
+  />
+</div>
+
           <div className="flex flex-col ml-5 w-[65%] max-md:ml-0 max-md:w-full">
             <div className="flex flex-col grow px-14 pt-20 pb-12 w-full bg-white rounded-3xl shadow-sm max-md:px-5 max-md:mt-10 max-md:max-w-full">
               <div className="self-center mt-7 text-5xl text-center text-black max-md:text-4xl">
