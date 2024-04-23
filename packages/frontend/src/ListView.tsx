@@ -3,13 +3,15 @@ import Header from "./Header.tsx";
 import Navbar from "./Navbar.tsx";
 import Print from "./print.tsx";
 
+
 function ListView() {
   return (
-    <div className="flex flex-col bg-zinc-100 bg-opacity-90">
+    
+    <div className="flex flex-col h-screen bg-zinc-100 bg-opacity-90 ">
       <Header />
-      
-       <div className="flex gap-5 w-full max-md:flex-wrap max-md:max-w-full">
-        <Navbar />
+       <Navbar />
+       <div className="flex gap-5 w-full max-md:flex-wrap max-md:max-w-full mt-28  ">
+       
         <div className="mx-auto px-9 max-w-[900] max-h-[100px] text-sm bg-gray-50 rounded-2xl border border-solid border-neutral-300">
           <div className="flex gap-3.5 justify-between items-center font-bold text-neutral-800 max-md:flex-wrap">
             <img
@@ -66,23 +68,153 @@ function ListView() {
           </div>
           
           </div>
-      
-          <div className="flex flex-col justify-center p-12 bg-white rounded-3xl border border-solid border-neutral-900 border-opacity-10 max-md:px-5">
-  <div className="flex flex-col pt-px pb-20 bg-white width:50%">
+
+
+          <div className="flex flex-col  w-12/12 max-md:ml-0 max-md:w-full mt-14 ">
+              <div className=" drop-shadow-xl grow items-end px-3 pt-16 pb-5 w-full bg-white  text-neutral-800 max-md:px-5 max-md:max-w-full rounded-lg ">
+                
+                <table className="table-auto w-full ">
+
+                <tr className="border-solid border-b-2 border-grey ">
+                          <th className="py-4 " >License Plate </th>
+                          <th className="">Timestamp</th>
+                          <th>Status</th>
+                          <th></th>
+                          <th></th>
+                </tr>
+                <tr className="border-solid border-b-2 border-grey my-4">
+                         <td className="pl-5 py-5">343434</td>
+                         <td>Wednesday, 03-Apr-24 09:12:17 UTC</td>
+                         <td>
+                          <button className="bg-green-500 rounded-full bg-opacity-20 ">
+                          <div className="flex flex-1 gap-5 justify-between text-green-600 whitespace-nowrap">
+                           <div className="justify-center items-start py-1.5 pr-3 pl-2 0 max-md:px-5">
+                              Completed
+                            </div>
+                          </div>
+                          </button>
+                         </td>
+                         <td>
+                         <Print/>
+                         </td>
+                       </tr>
+
+                       <tr className="border-solid border-b-2 border-grey my-4">
+                         <td className="pl-5 py-5">343434</td>
+                         <td>Wednesday, 03-Apr-24 09:12:17 UTC</td>
+                         <td>
+                         <Link to="/Review">
+                          <button className="bg-red-500 hover:bg-red-600  rounded-full bg-opacity-20 ">
+                          <div className="flex flex-1 gap-5 justify-between text-red-600 hover:text-red-300  whitespace-nowrap">
+                           <div className="justify-center items-start py-1.5 pr-3 pl-2 0 max-md:px-5">
+                              Review
+                            </div>
+                          </div>
+                          </button>
+                        </Link>
+                         </td>
+                         <td>
+                         
+                         </td>
+                       </tr>
+
+                       <tr className="border-solid border-b-2 border-grey my-4">
+                         <td className="pl-5 py-5">343434</td>
+                         <td>Wednesday, 03-Apr-24 09:12:17 UTC</td>
+                         <td>
+                          <button className="bg-green-500 rounded-full bg-opacity-20 ">
+                          <div className="flex flex-1 gap-5 justify-between text-green-600 whitespace-nowrap">
+                           <div className="justify-center items-start py-1.5 pr-3 pl-2 0 max-md:px-5">
+                              Completed
+                            </div>
+                          </div>
+                          </button>
+                         </td>
+                         <td>
+                         <Print/>
+                         </td>
+                       </tr>
+
+                       <tr className="border-solid border-b-2 border-grey my-4">
+                         <td className="pl-5 py-5">343434</td>
+                         <td>Wednesday, 03-Apr-24 09:12:17 UTC</td>
+                         <td>
+                         <Link to="/Review">
+                          <button className="bg-red-500 hover:bg-red-600  rounded-full bg-opacity-20 ">
+                          <div className="flex flex-1 gap-5 justify-between text-red-600 hover:text-red-300  whitespace-nowrap">
+                           <div className="justify-center items-start py-1.5 pr-3 pl-2 0 max-md:px-5">
+                              Review
+                            </div>
+                          </div>
+                          </button>
+                        </Link>
+                         </td>
+                         <td>
+                         
+                         </td>
+                       </tr>
+
+                       <tr className="border-solid border-b-2 border-grey my-4">
+                         <td className="pl-5 py-5">343434</td>
+                         <td>Wednesday, 03-Apr-24 09:12:17 UTC</td>
+                         <td>
+                          <button className="bg-green-500 rounded-full bg-opacity-20 ">
+                          <div className="flex flex-1 gap-5 justify-between text-green-600 whitespace-nowrap">
+                           <div className="justify-center items-start py-1.5 pr-3 pl-2 0 max-md:px-5">
+                              Completed
+                            </div>
+                          </div>
+                          </button>
+                         </td>
+                         <td>
+                         <Print/>
+                         </td>
+                       </tr>
+
+                       <tr className="border-solid border-b-2 border-grey my-4">
+                         <td className="pl-5 py-5">343434</td>
+                         <td>Wednesday, 03-Apr-24 09:12:17 UTC</td>
+                         <td>
+                         <Link to="/Review">
+                          <button className="bg-red-500 hover:bg-red-600  rounded-full bg-opacity-20 ">
+                          <div className="flex flex-1 gap-5 justify-between text-red-600 hover:text-red-300  whitespace-nowrap">
+                           <div className="justify-center items-start py-1.5 pr-3 pl-2 0 max-md:px-5">
+                              Review
+                            </div>
+                          </div>
+                          </button>
+                        </Link>
+                         </td>
+                         <td>
+                         
+                         </td>
+                       </tr>
+
+                       
+                </table>
+
+                </div>
+          </div>                 
+ {/*  
+
+ 
+
+  <div className="flex flex-col justify-center p-12 bg-white rounded-3xl border border-solid border-neutral-900 border-opacity-10 max-md:px-5">
+  <div className="flex flex-col pt-px pb-8 bg-white width:50%">
     <div className="flex gap-8 justify-between items-start max-w-70% text-sm font-medium text-slate-800 w-[705px] max-md:flex-wrap">
       <div className="flex gap-5 justify-between">
         <div>License plate</div>
-        <div>Car Description</div>
+        
         <div>Timestamp</div>
-        <div>Type</div>
+       
         <div>Status</div>
       </div>
     </div>
+
     <div className="flex flex-col justify-center px-2 py-3 mt-6 text-sm border-b border-solid border-slate-800 border-opacity-10 max-md:max-w-full">
       <div className="flex gap-5 w-full max-md:flex-wrap max-md:max-w-full">
         <div className="flex gap-5 justify-center items-center text-slate-800 max-md:flex-wrap max-md:max-w-full">
           <div className="self-stretch my-auto">1110</div>
-          <div className="self-stretch my-auto">Audi</div>
           <div className="text-xs font-semibold text-neutral-800 break-all">
             Wednesday, 03-Apr-24 09:12:17 UTC
           </div>
@@ -101,7 +233,7 @@ function ListView() {
       <div className="flex gap-5 w-full max-md:flex-wrap max-md:max-w-full">
         <div className="flex gap-5 justify-between my-auto text-sm text-slate-800 max-md:flex-wrap max-md:max-w-full">
           <div>3312</div>
-          <div>BMW</div>
+
           <div className="text-xs font-semibold text-neutral-800 break-all">
             Wednesday, 03-Apr-24 09:12:17 UTC
           </div>
@@ -121,7 +253,7 @@ function ListView() {
       <div className="flex gap-5 w-full max-md:flex-wrap max-md:max-w-full">
         <div className="flex gap-5 justify-between items-center text-slate-800 max-md:flex-wrap max-md:max-w-full">
           <div className="self-stretch my-auto">4556</div>
-          <div className="self-stretch my-auto">Toyota</div>
+
           <div className="text-xs font-semibold text-neutral-800 break-all">
             Wednesday, 03-Apr-24 09:12:17 UTC
           </div>
@@ -138,11 +270,11 @@ function ListView() {
       </div>
     </div>
   
-    <div className="flex flex-col justify-center px-2 py-4 mb-48 text-sm border-b border-solid border-slate-800 border-opacity-10 max-md:mb-10 max-md:max-w-full">
+    <div className="flex flex-col justify-center px-2 py-4 mb-48 text-sm border-b border-solid border-slate-800 border-opacity-10 max-md:mb-1 max-md:max-w-full">
       <div className="flex gap-5 w-full max-md:flex-wrap max-md:max-w-full">
-        <div className="flex gap-5 justify-between my-auto text-slate-800 max-md:flex-wrap max-md:max-w-full">
+        <div className="flex gap-5 justify-between my-auto text-slate-80 max-md:flex-wrap max-md:max-w-full">
           <div>2245</div>
-          <div>kia</div>
+
           <div className="text-xs font-semibold text-neutral-800 flex-wrap">
             Wednesday, 03-Apr-24 09:12:17 UTC
           </div>
@@ -161,10 +293,10 @@ function ListView() {
   </div>
 </div>
 
-
-          </div>
-        </div>
-        </div>
+*/}
+</div>
+</div>
+</div>
   );
 }
 export default ListView;
