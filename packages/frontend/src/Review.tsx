@@ -20,11 +20,12 @@ function Review() {
 
 
   return (
-    <div className="flex flex-col bg-zinc-100 bg-opacity-90 ">
+    
+    <div className="flex flex-col bg-zinc-100 bg-opacity-90 overflow-x-hidden ">
       <Header />
-      
-      <div className="flex gap-5 w-full max-md:flex-wrap max-md:max-w-full">
-        <Navbar />
+       <Navbar />
+      <div className="flex gap-5 ml-32 w-full max-md:flex-wrap max-md:max-w-full mt-20">
+       
         <div className="flex flex-col grow shrink-0 self-start mt-6 basis-0 w-fit max-md:max-w-full">
           
         <div className="flex gap-5 self-start px-5 text-3xl font-bold tracking-normal text-neutral-800">
@@ -35,7 +36,7 @@ function Review() {
         
         </div>
     
-          <div className="mt-20 max-md:mt-10 max-md:max-w-full">
+          <div className="mt-20 max-md:mt-10 max-md:max-w-full ml-12">
             <div className="  flex gap-0 max-md:flex-col max-md:gap-0 pb-40">
               <div className=" drop-shadow-xl flex flex-col w-6/12 max-md:ml-0 max-md:w-full">
                 <div className=" flex overflow-hidden relative flex-col grow justify-center px-2.5 py-20 min-h-[536px] max-md:max-w-full rounded-lg">
@@ -44,7 +45,7 @@ function Review() {
                     src={street}
                     className="object-cover absolute inset-0 size-full"
                   />
-                  <div className="flex relative gap-5 justify-between mt-40 max-md:flex-wrap max-md:mt-10 max-md:max-w-full">
+                  <div className="flex relative gap-3 justify-between mt-40 max-md:flex-wrap max-md:mt-10 max-md:max-w-full">
                     
                    
                   </div>
@@ -52,7 +53,7 @@ function Review() {
               </div>
               
               
-              <div className="flex flex-col ml-5 w-5/12 max-md:ml-0 max-md:w-full ">
+              <div className="flex flex-col  w-4/12 max-md:ml-0 max-md:w-full ">
               <div className=" drop-shadow-xl grow items-end px-3 pt-16 pb-5 w-full bg-white  text-neutral-800 max-md:px-5 max-md:max-w-full rounded-lg ">
                 
                 <table className="table-auto w-full ">
