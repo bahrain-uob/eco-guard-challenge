@@ -3,6 +3,7 @@ import { Kysely } from "kysely";
  * @param db {Kysely<any>}
 **/
 // Insert data for parking areas
+
 export async function up(db) {
 await db
   .insertInto('registered_cars')
@@ -26,66 +27,37 @@ await db
 await db
    .insertInto('violated_cars')
    .values([
-    {
-        license_plate: '434277',
-        car_description: 'Audi A6,salon black',
-        location: 'Manama',
-        timestamp: '2024-04-10 14:30:00',
-        type: 'Breaking light violation',
-        image: 'evidence/image1.jpg',
-        status: 'Completed',
+    {    
+      violation_id:1,
+      license_plate: '434277',
+      type: 'tailgating',
+      latitude: 26.224447,
+      latitude: 50.617151,
+      timestamp:"2024-04-24 15:45:30",
+      image_key: 'evidence/image1.jpg',
+      status: 'aproved',
     },
-    {
-      license_plate: '987654',
-      car_description: 'Navy blue Honda civic',
-      location: 'Isa town',
-      timestamp: '2024-04-11 09:45:00',
-      type: 'Smoking violation',
-      image: 'https://example.com/image2.jpg',
-      status: 'Review',
+    {    
+      violation_id:2,
+      license_plate: '434277',
+      type: 'unregisterd car',
+      latitude: 26.054315,
+      latitude: 50.537455,
+      timestamp:"2024-04-24 15:45:30",
+      image_key: 'evidence/image1.jpg',
+      status: 'review',
     },
-    {
-      license_plate: '120987',
-      car_description: 'Black Toyota',
-      location: 'Sanad',
-      timestamp: '2024-04-12 16:20:00',
-      type: 'Tailgating',
-      image: 'https://example.com/image3.jpg',
-      status: 'Rejected',
+    {    
+      violation_id:3,
+      license_plate: '434277',
+      type: '',
+      latitude: 26.152973,
+      latitude: 50.474248,
+      timestamp:"2024-04-24 15:45:30",
+      image_key: 'evidence/image1.jpg',
+      status: 'rejected',
     },
    ])
    .execute();
- 
-  await db
-    .insertInto('light_violations')
-    .values([
-      {
-        license_plate: '19870',
-        timestamp: '2024-04-10 14:30:00',
-        image: 'https://example.com/light_violation1.jpg',
-        status: 'Review',
-        location: 'Sitra',
-        violation_type: 'Breaklight',
-      },
-      {
-        license_plate: '87651',
-        timestamp: '2024-04-11 09:45:00',
-        image: 'https://example.com/light_violation2.jpg',
-        status: 'Reviewed',
-        location: 'Jidali',
-        violation_type: 'Headlight',
-      },
-      {
-        license_plate: '874590',
-        timestamp: '2024-04-12 16:20:00',
-        image: 'https://example.com/light_violation3.jpg',
-        status: 'Checked',
-        location: 'Manama',
-        violation_type: 'Breaklight',
-      },
-    ])
-    .execute();
- 
- 
-}
- 
+  
+  }
