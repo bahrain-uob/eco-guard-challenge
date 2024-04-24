@@ -1,6 +1,7 @@
 import Navbar from "./Navbar.tsx";
 import Header from "./Header.tsx";
 import map from "./assets/bahrainMap.png";
+
 function HeatMap() {
   return (
     <div className="flex flex-col bg-zinc-100 bg-opacity-90">
