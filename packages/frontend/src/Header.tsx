@@ -1,7 +1,7 @@
 //import icon from "./assets/image 4.svg";
 //import SearchBar from "./SearchBar.tsx";
 import { FaBell } from "react-icons/fa";
-import Dropdown from "./dropdown.jsx";
+import Dropdown from "./Dropdown.jsx";
 import { BsArrowBarUp } from "react-icons/bs"
 function Header() {
 
