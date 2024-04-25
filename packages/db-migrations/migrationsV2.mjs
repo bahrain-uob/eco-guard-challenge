@@ -25,34 +25,34 @@ await db
   .execute();
  
 await db
-   .insertInto('violated_cars')
+   .insertInto('violations')
    .values([
     {    
       violation_id:1,
-      license_plate: '434277',
+      plate_number: '434277',
       type: 'tailgating',
       latitude: 26.224447,
-      latitude: 50.617151,
+      longitude: 50.617151,
       timestamp:"2024-04-24 15:45:30",
       image_key: 'evidence/image1.jpg',
       status: 'aproved',
     },
     {    
       violation_id:2,
-      license_plate: '434277',
+      plate_number: '434277',
       type: 'unregisterd car',
       latitude: 26.054315,
-      latitude: 50.537455,
+      longitude: 50.537455,
       timestamp:"2024-04-24 15:45:30",
       image_key: 'evidence/image1.jpg',
       status: 'review',
     },
     {    
       violation_id:3,
-      license_plate: '434277',
-      type: '',
+      plate_number: '434277',
+      type: 'tailgating',
       latitude: 26.152973,
-      latitude: 50.474248,
+      longitude: 50.474248,
       timestamp:"2024-04-24 15:45:30",
       image_key: 'evidence/image1.jpg',
       status: 'rejected',
