@@ -24,6 +24,10 @@ export async function up(db) {
     .addColumn("status","varchar(255)")
     .execute();
  
+
+
+
+    
 }
  
 /**
