@@ -17,8 +17,8 @@ export async function up(db) {
     .addColumn("violation_id","integer", (col)=> col.autoIncrement().primaryKey())
     .addColumn("plate_number", "varchar(255)")
     .addColumn("type","varchar(255)")
-    .addColumn("violation","float")
     .addColumn("latitude","float")
+    .addColumn("longitude","float")
     .addColumn("timestamp","timestamp")
     .addColumn("image_key","varchar(255)")
     .addColumn("status","varchar(255)")
@@ -33,7 +33,7 @@ export async function up(db) {
 export async function down(db) {
  
   
-  await db.schema.dropTable("violated_cars").execute();
+  await db.schema.dropTable("violations").execute();
   await db.schema.dropTable("registered_cars").execute();
  
 }
