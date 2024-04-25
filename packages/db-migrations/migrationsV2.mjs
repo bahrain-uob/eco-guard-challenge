@@ -50,7 +50,7 @@ await db
     {    
       violation_id:3,
       license_plate: '434277',
-      type: '',
+      type: 'tailgating',
       logitude: 26.152973,
       latitude: 50.474248,
       timestamp:"2024-04-24 15:45:30",
