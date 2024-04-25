@@ -18,6 +18,7 @@ export async function up(db) {
     .addColumn("plate_number", "varchar(255)")
     .addColumn("type","varchar(255)")
     .addColumn("violation","float")
+    .addColumn("logitude","float")
     .addColumn("latitude","float")
     .addColumn("timestamp","timestamp")
     .addColumn("image_key","varchar(255)")
