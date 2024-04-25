@@ -25,7 +25,7 @@ await db
   .execute();
  
 await db
-   .insertInto('violated_cars')
+   .insertInto('violations')
    .values([
     {    
       violation_id:1,
