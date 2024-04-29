@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-ecoguardchallenge-dev-3e0d0-authRole",
+      "UnauthRoleArn": "arn:aws:iam::730335464212:role/amplify-ecoguardchallenge-dev-3e0d0-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::730335464212:role/amplify-ecoguardchallenge-dev-3e0d0-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-ecoguardchallenge-dev-3e0d0-deployment",
+      "UnauthRoleName": "amplify-ecoguardchallenge-dev-3e0d0-unauthRole",
+      "StackName": "amplify-ecoguardchallenge-dev-3e0d0",
+      "StackId": "arn:aws:cloudformation:us-east-1:730335464212:stack/amplify-ecoguardchallenge-dev-3e0d0/6194d1e0-062e-11ef-96fe-127a419e7127",
+      "AmplifyAppId": "d181lzhxl76man"
+    },
+    "categories": {
+      "auth": {
+        "ecoguardchallenge137e2f79": {}
+      }
+    }
+  }
+}
