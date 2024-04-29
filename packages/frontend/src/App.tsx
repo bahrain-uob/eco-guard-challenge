@@ -16,6 +16,13 @@ import Tables from './pages/Tables';
 import Alerts from './pages/UiElements/Alerts';
 import Buttons from './pages/UiElements/Buttons';
 
+// import Amplify from 'aws-amplify';
+// import awsconfig from './aws-exports';
+// import {AmplifySignOut,WithAuthenticator} from '@aws-amplify/ui-react';
+
+// Amplify.configure{awsconfig}
+
+
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
   const { pathname } = useLocation();
@@ -146,4 +153,4 @@ function App() {
   );
 }
 
-export default App;
+export default {App};
