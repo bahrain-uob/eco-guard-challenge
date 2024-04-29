@@ -153,4 +153,4 @@ function App() {
   );
 }
 
-export default WithAuthenticator{App};
+export default {App};
