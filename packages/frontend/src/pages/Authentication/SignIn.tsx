@@ -1,11 +1,46 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import Logo from '../../images/logo/logo.png';
-import DefaultLayout from '../../layout/DefaultLayout';
+import {toast} from 'react-toastify'
+import { signIn } from 'aws-amplify/auth';
+import { useNavigate } from 'react-router-dom';
+import { getCurrentUser } from 'aws-amplify/auth';
 
-const SignIn: React.FC = () => {
-  return (
-    <DefaultLayout>
+type SetStateType<T> = React.Dispatch<React.SetStateAction<T>>;
+const SignIn = ({
+  setUser,
+}: {
+  setUser: SetStateType<any>;
+  user: any;
+}) => {
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const navigate = useNavigate();
+  const handleSignIn = async (email: string, password: string) => {
+    toast.info('Logging in...', { position: 'top-right' });
+    try {
+      const user = await signIn({ username: email, password });
+      setUser(user);
+     toast.success('Welcome!', { position: 'top-right' });
+      navigate('/Dashboard'); // Redirect to dashboard after successful sign-in
+    } catch (error) {
+      console.error('Error signing in', error);
+      toast.error('Error signing in', { position: 'top-right' });
+    }
+  };
+
+   useEffect(() => {
+    const checkUser = async () => {
+      const currentUser = await getCurrentUser();
+      if (currentUser) {
+        setUser(currentUser);
+        console.log('userid', currentUser.userId);
+        navigate('/Dashboard');
+      }
+    };
+    checkUser();
+  }, []);
+
+  return ( 
 
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="flex flex-wrap items-center">
@@ -23,7 +58,12 @@ const SignIn: React.FC = () => {
                 Sign In to DashCop
               </h2>
 
-              <form>
+              <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleSignIn(email, password);
+                  }}
+              >
                 <div className="mb-4">
                   <label className="mb-2.5 block font-medium text-black dark:text-white">
                     Email
@@ -31,6 +71,7 @@ const SignIn: React.FC = () => {
                   <div className="relative">
                     <input
                       type="email"
+                      onChange={(e) => setEmail(e.target.value)}
                       placeholder="Enter your email"
                       className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
@@ -44,6 +85,7 @@ const SignIn: React.FC = () => {
                   <div className="relative">
                     <input
                       type="password"
+                      onChange={(e) => setPassword(e.target.value)}
                       placeholder="Enter your password"
                       className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
@@ -51,18 +93,19 @@ const SignIn: React.FC = () => {
                 </div>
 
                 <div className="mb-5">
-                  <input
+              
+                  <input 
                     type="submit"
                     value="Sign In"
                     className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90"
                   />
+              
                 </div>
               </form>
             </div>
           </div>
         </div>
       </div>
-    </DefaultLayout>
   );
 };
 
