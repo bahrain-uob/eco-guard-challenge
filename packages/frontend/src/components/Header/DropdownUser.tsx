@@ -1,13 +1,27 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-
+import { signOut } from 'aws-amplify/auth';
 import UserOne from '../../images/user/user-01.png';
+import {toast} from 'react-toastify'
+import { useNavigate } from 'react-router-dom';
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
+  const navigate =useNavigate();
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      // Navigate to the SignInPage after signing out
+      navigate('/Authentication/SignIn');
+      toast.success('Logged out successfully', { position: 'top-left' });
+    } catch (error) {
+      console.error('Error signing out', error);
+      toast.error('Error during logout', { position: 'top-left' });
+    }
+  };
 
   // close on click outside
   useEffect(() => {
@@ -153,7 +167,9 @@ const DropdownUser = () => {
             </Link>
           </li>
         </ul>
-        <button className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+        <button 
+        className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+        onClick={handleSignOut} >
           <svg
             className="fill-current"
             width="22"

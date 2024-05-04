@@ -6,6 +6,24 @@ import './css/style.css';
 import './css/satoshi.css';
 import 'jsvectormap/dist/css/jsvectormap.css';
 import 'flatpickr/dist/flatpickr.min.css';
+import { Amplify } from "aws-amplify";
+
+Amplify.configure({
+  Auth: {
+    Cognito:{
+    userPoolId: "us-east-1_ajpyfrXsE",
+    userPoolClientId: "3a4saggp6nanpvgumcn2g0f4n7"
+ } },
+  API: {
+    endpoints: [
+      {
+        name: "api",
+        endpoint: import.meta.env.VITE_APP_API_URL,
+        region: import.meta.env.VITE_APP_REGION,
+      },
+    ],
+  },
+} as any);
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
