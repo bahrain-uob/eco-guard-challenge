@@ -12,7 +12,7 @@ export function StorageStack({ stack }: StackContext) {
   });
 
   // Create the object-detection & tracking DynamoDB table
-  const Object_detection_and_tracking = new Table(stack, "license_plate_numbers", {
+  const Object_detection_and_tracking = new Table(stack, "object_detection_and_tracking", {
     fields: {
       fragment_number: "string",
       y1: "string",
