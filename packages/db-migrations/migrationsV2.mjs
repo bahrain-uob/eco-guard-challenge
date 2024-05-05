@@ -41,7 +41,7 @@ await db
     {
       registration_id: 6,
       plate_number: '540074',
-      registration_date: '2023-02-02',
+      registration_date: '2023-02-10',
       registration_date_expiration: '2024-02-02',
     },
   ])
