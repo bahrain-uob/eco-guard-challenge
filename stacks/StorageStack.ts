@@ -24,7 +24,6 @@ export function StorageStack({ stack }: StackContext) {
       x1car:"number",
       x2:"number",
       x2car:"number",
-      y1:"number",
       y1car:"number",
       y2:"number",
       y2car:"number",
