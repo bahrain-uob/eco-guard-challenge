@@ -3,7 +3,7 @@ import { Kysely } from "kysely";
  * @param db {Kysely<any>}
 **/
 // Insert data for parking areas
-
+ 
 export async function up(db) {
 await db
   .insertInto('registered_cars')
@@ -20,7 +20,30 @@ await db
       registration_date: '2023-02-02',
       registration_date_expiration: '2024-02-02',
     },
-   
+    {
+      registration_id: 3,
+      plate_number: '324505',
+      registration_date: '2023-02-04',
+      registration_date_expiration: '2024-02-06',
+    },
+    {
+      registration_id: 4,
+      plate_number: '617826',
+      registration_date: '2023-02-07',
+      registration_date_expiration: '2024-02-09',
+    },
+    {
+      registration_id: 5,
+      plate_number: '49972',
+      registration_date: '2023-02-09',
+      registration_date_expiration: '2024-02-10',
+    },
+    {
+      registration_id: 6,
+      plate_number: '540074',
+      registration_date: '2023-02-02',
+      registration_date_expiration: '2024-02-02',
+    },
   ])
   .execute();
  
@@ -59,5 +82,5 @@ await db
     },
    ])
    .execute();
-  
+ 
   }

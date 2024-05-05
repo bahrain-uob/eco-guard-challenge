@@ -1,19 +1,27 @@
-import { Table, StackContext, RDS } from "sst/constructs";
+import { Table, StackContext, RDS, Bucket } from "sst/constructs";
+// import { Bucket, StackContext, Table } from "sst/constructs";
 import * as rds from "aws-cdk-lib/aws-rds";
 import * as secretsManager from "aws-cdk-lib/aws-secretsmanager";
 import * as path from 'path';
 import { Fn } from "aws-cdk-lib";
 
 export function DBStack({ stack, app }: StackContext) {
- /*   
-    // Create a DynamoDB table
-    const table = new Table(stack, "Counter", {
+ 
+//Create an S3 bucket
+const bucket1 = new Bucket(stack, "yellow-lane-plate-numbers");
+const bucket2 = new Bucket(stack, "yellow-lane-violations-bucket");
+// const bucket3 = new Bucket(stack, "third-bucket-name");
+//Create a DynamoDB table
+    const table = new Table(stack, "Yellowlane_violatedCars", {
         fields: {
-        counter: "string",
+        car_id: "string",
+        license_plate_number: "string",
+        image_key: "string",
+        timestamp: "string",
         },
-        primaryIndex: { partitionKey: "counter" },
+        primaryIndex: { partitionKey: "car_id"},
     });
-*/
+ 
     // Create an RDS database
     const mainDBLogicalName = "MainDatabase";
     // Define output/export attributes names
@@ -60,6 +68,8 @@ export function DBStack({ stack, app }: StackContext) {
     }
 
     return {
-        //table,
-         db};
+        table,
+        bucket1,
+         db,
+        bucket2};
 }
