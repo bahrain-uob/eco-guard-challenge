@@ -2,10 +2,9 @@ import json
 import time
 import random
 import string
+import util
+from util import format_license
 import boto3
-
-#import util
-
 
 def random_string():
     return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
@@ -68,6 +67,7 @@ def lambda_handler(event, context):
                 
         text = text.upper().replace(' ', '').replace('\n', '')
         print(text)
+        text=format_license(text)
         license_plate_number_ = text 
        
         # write to database
@@ -99,5 +99,5 @@ def lambda_handler(event, context):
     # TODO implement
     return {
         'statusCode': 200,
-        'body': json.dumps('Successsfully added New LicensePlate!')
+        'body': json.dumps('Hello from License-Plate-Detection Lambda!')
     }
