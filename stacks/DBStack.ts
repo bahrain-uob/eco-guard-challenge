@@ -47,7 +47,7 @@ const Unregsistered_bucket = new Bucket(stack, "Alpr-detection-bucket");
         primaryIndex: { partitionKey: "fragment_number", sortKey: "y1"},
     });
 
-    const Unregsistered_table = new Table(stack, "Yellowlane_violatedCars", {
+    const Unregsistered_table = new Table(stack, "Unregistered_license_plates", {
         fields: {
         car_id: "string",
         license_plate_number: "string",
