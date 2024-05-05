@@ -10,6 +10,12 @@ export function DBStack({ stack, app }: StackContext) {
 //Create an S3 bucket
 const bucket1 = new Bucket(stack, "yellow-lane-plate-numbers");
 const bucket2 = new Bucket(stack, "yellow-lane-violations-bucket");
+
+//Create Unregsistered LP Bucket
+const Unregsistered_bucket = new Bucket(stack, "Alpr-detection-bucket");
+
+
+
 // const bucket3 = new Bucket(stack, "third-bucket-name");
 //Create a DynamoDB table
     const table = new Table(stack, "Yellowlane_violatedCars", {
@@ -22,6 +28,35 @@ const bucket2 = new Bucket(stack, "yellow-lane-violations-bucket");
         primaryIndex: { partitionKey: "car_id"},
     });
  
+    const object_table = new Table(stack, "Object_detection_and_tracking", {
+        fields: {
+        fragment_number: "string",
+        abs_frame_number: "number",
+        class_id: "number",
+        frame_number: "string",
+        track_id: "number",
+        x1: "number",
+        x1car: "number",
+        x2: "number",
+        x2car: "number",
+        y1: "number",
+        y1car: "number",
+        y2: "number",
+        y2car:"number",
+        },
+        primaryIndex: { partitionKey: "fragment_number", sortKey: "y1"},
+    });
+
+    const Unregsistered_table = new Table(stack, "Yellowlane_violatedCars", {
+        fields: {
+        car_id: "string",
+        license_plate_number: "string",
+        time: "number",
+        },
+        primaryIndex: { partitionKey: "car_id"},
+    });
+
+
     // Create an RDS database
     const mainDBLogicalName = "MainDatabase";
     // Define output/export attributes names
@@ -70,6 +105,8 @@ const bucket2 = new Bucket(stack, "yellow-lane-violations-bucket");
     return {
         table,
         bucket1,
-         db,
-        bucket2};
+        db,
+        bucket2,
+        Unregsistered_bucket,
+    };
 }
