@@ -1,0 +1,81 @@
+1. Set up a user pool
+
+To set up a user pool
+Sign in to the Amazon Cognito console and verify the region is correct.
+In the navigation on the left choose User pools.
+In the User pools section, choose Create user pool.
+
+Complete the following sections:
+Step 1: Configure sign-in experience - In the Cognito user pool sign-in options section, select the appropriate options.
+Select Next.
+Step 2: Configure security requirements - Select the appropriate options.
+Select Next.
+Step 3: Configure sign-up experience - Select the appropriate options.
+Select Next.
+Step 4: Configure message delivery - Select the appropriate options.
+
+In the IAM role selection field, select an existing role or create a new role.
+Select Next.
+Step 5: Integrate your app - Select the appropriate options.
+In the Initial app client field, choose Confidential client.
+Select Next.
+Step 6: Review and create - Review your selections from the previous sections, then choose Create user pool.
+
+On the User pools page, select the pool that you just created.
+Copy the User pool ID and make note of this for later. In the awsconfiguration.json file, this is CognitoUserPool.Default.PoolId.
+Select the App integration tab and go to the bottom of the page.
+In the App client list section, choose the App client name you just created.
+Copy the Client ID and make note of this for later. In the awsconfiguration.json file, this is CognitoUserPool.Default.AppClientId.
+Show the Client secret and make note of this for later. In the awsconfiguration.json file, this is CognitoUserPool.Default.AppClientSecret.
+
+2. Set up an identity pool
+To set up an identity pool
+Sign in to the Amazon Cognito console and verify the region is correct.
+In the navigation on the left choose Identity pools.
+Choose Create identity pool.
+Configure the identity pool.
+Step 1: Configure identity pool trust - Complete the following sections:
+User access - Select Authenticated access
+Authenticated identity sources - Select Amazon Cognito user pool
+Select Next.
+Step 2: Configure permissions - In the Authenticated role section, complete the following fields:
+IAM role - Select Create a new IAM role
+IAM role name - Enter a name and make note of it for a later step.
+Select Next.
+Step 3: Connect identity providers - In the User pool details section complete the following fields:
+User pool ID - Select the user pool you created earlier.
+App client ID - Select the app client ID you created earlier.
+Select Next.
+Step 4: Configure properties - Type a name in the Identity pool name field.
+Select Next.
+Step 5: Review and create - Review your selections in each of the sections, then select Create identity pool.
+On the Identity pools page, select your new identity pool.
+Copy the Identity pool ID and make note of this for later. In the awsconfiguration.json file, this is CredentialsProvider.CognitoIdentity.Default.PoolId.
+Update the permissions for the IAM role.
+Sign in to the AWS Management Console and open the IAM console at https://console.aws.amazon.com/iam/.
+In the navigation on the left, choose Roles.
+Find and select the role you created above.
+
+#Note
+Use the search bar, if needed.
+Select the attached permissions policy.
+Select Edit.
+Select the JSON tab and replace the policy with the following:
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "cognito-identity:*",
+                "kinesisvideo:*"
+            ],
+            "Resource": [
+                "*"
+            ]
+        }
+    ]
+}
+Select Next.
+Select the box next to Set this new version as the default if it isn't already selected.
+Select Save changes.
