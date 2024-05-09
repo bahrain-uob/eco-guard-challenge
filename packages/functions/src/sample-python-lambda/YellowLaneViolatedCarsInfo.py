@@ -16,7 +16,6 @@ region_name = 'us-east-1'
 # define clients
 s3_client = boto3.client('s3', region_name=region_name)
 textract_client = boto3.client('textract', region_name=region_name)
-sqs_client = boto3.client('sqs', region_name=region_name)
  
 def lambda_handler(event, context):
    
@@ -69,17 +68,6 @@ def lambda_handler(event, context):
         text=format_license(text)
         license_plate_number_ = text
        
-        # update the sqs queue
-        sqs_client.send_message(
-            QueueUrl='https://sqs.us-east-1.amazonaws.com/730335464212/yellowLaneQueue.fifo',
-            MessageBody=json.dumps({'license_plate': {'track_id': str(car_id_),
-                                                'text':license_plate_number_}
-               
-            }),
-            MessageGroupId='lambda',
-            MessageDeduplicationId=random_string()
-            )
-               
        
     else:
         # TODO: implement !
@@ -131,8 +119,8 @@ def lambda_handler(event, context):
              {'name': 'car_id', 'value': {'longValue': 1}},
              {'name': 'license_plate_number_', 'value': {'stringValue': license_plate_number_}},
              {'name': 'type', 'value': {'stringValue': 'Yellow Lane'}},
-             {'name': 'longitude', 'value': {'longValue': 26054315}},  # Convert string to long value
-             {'name': 'latitude', 'value': {'longValue': 50537455}},  # Convert string to long value
+             {'name': 'longitude', 'value': {'longValue': 26.054315}},  
+             {'name': 'latitude', 'value': {'longValue': 50.537455}},  
              {'name': 'timestamp', 'value': {'stringValue': current_date}},
              {'name': 'image_key', 'value': {'stringValue': filename}},
              {'name': 'status', 'value': {'stringValue': 'review'}},
