@@ -13,20 +13,6 @@ const bucket2 = new Bucket(stack, "yellow-lane-violations-bucket");
 
 //Create Unregsistered LP Bucket
 const Unregsistered_bucket = new Bucket(stack, "Alpr-detection-bucket");
-
-
-
-// const bucket3 = new Bucket(stack, "third-bucket-name");
-//Create a DynamoDB table
-    const table = new Table(stack, "Yellowlane_violatedCars", {
-        fields: {
-        car_id: "string",
-        license_plate_number: "string",
-        image_key: "string",
-        timestamp: "string",
-        },
-        primaryIndex: { partitionKey: "car_id"},
-    });
  
     const object_table = new Table(stack, "Object_detection_and_tracking", {
         fields: {
@@ -103,7 +89,6 @@ const Unregsistered_bucket = new Bucket(stack, "Alpr-detection-bucket");
     }
 
     return {
-        table,
         bucket1,
         db,
         bucket2,

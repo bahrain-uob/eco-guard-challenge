@@ -1,64 +1,134 @@
-# import json
-# import boto3
-# from urllib.parse import unquote_plus
-
-# #define clients
-# s3_client = boto3.client('s3')
-# dynamodb_client = boto3.client('dynamodb')
-# textract_client = boto3.client('textract')
-
-# #Extract violated car with it's license plate image from an s3 bucket 
-# #Take the license plate cropped image to textract client to generate a text from the image
-# def extract_license_plate(image_bucket, image_key):
-#     response = textract_client.detect_document_text(
-#         Document={'S3Object': {'Bucket': image_bucket, 'Name': image_key}}
-#     )
-   
-#     # Extract license plate text from Textract response
-#     license_plate_text = ''
-#     for item in response.get('Blocks', []):
-#        if item.get('BlockType') == 'LINE':
-#         license_plate_text += item.get('Text', '')
-
-#     # Check if license plate text extraction was successful
-#     if license_plate_text.strip():
-#        return license_plate_text.strip()  # Trim leading/trailing whitespace
-#     else:
-#        return 'License plate text extraction failed'
-
+import json
+import time
+import datetime
+import random
+import string
+from util import format_license
+import os
+import boto3
  
-# def lambda_handler(event, context):
-#     # Get the bucket name and object key from the S3 event
-#     bucket_name = event['Records'][0]['s3']['bucket']['name']
-#     object_key = unquote_plus(event['Records'][0]['s3']['object']['key'])
  
-#     # Give a unique ID for the image
-#     image_id = object_key.split('.')[0]  
+def random_string():
+    return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
+ 
+region_name = 'us-east-1'
+ 
+# define clients
+s3_client = boto3.client('s3', region_name=region_name)
+textract_client = boto3.client('textract', region_name=region_name)
+ 
+def lambda_handler(event, context):
    
-#     # Copy the image to the new S3 bucket
-#     new_bucket_name = 'your-new-bucket-name'  # Replace with your new bucket name
-#     new_object_key = f'images/{image_id}{image_extension}'  # type: ignore # Adjust the key format as needed
-#     s3_client.copy_object(
-#         Bucket=new_bucket_name,
-#         Key=new_object_key,
-#         CopySource={'Bucket': bucket_name, 'Key': object_key}
-#     )
+    tic = time.time()
    
-#     # Extract license plate number using Textract
-#     license_plate_number = extract_license_plate(bucket_name, object_key)
+    # get object
+    bucket_name = event['Records'][0]['s3']['bucket']['name']
+    filename = event['Records'][0]['s3']['object']['key']
    
-#     # Save the license plate number to DynamoDB
-#     dynamodb_table_name = 'Yellow_lane_violatedCars'
-#     dynamodb_client.put_item(
-#         TableName=dynamodb_table_name,
-#         Item={
-#             'image_id': {'S': image_id},
-#             'license_plate_number': {'S': license_plate_number},
-#             'image_url': {'S': f's3://{new_bucket_name}/{new_object_key}'}
-#         }
-#     )
+    print(filename, bucket_name)
    
-#     return {
-#         'statusCode': 200,
-#         'body': json.dumps('Image processed and data saved successfully!')
-#     }
+    car_id_ = int(filename.split('_')[0])
+   
+    # text detection (initialize textract job)
+    s3_object = {'Bucket': bucket_name, 'Name': filename}
+   
+    while True:
+        try:
+            response = textract_client.start_document_text_detection(
+                DocumentLocation={'S3Object': s3_object}
+                )
+            break
+        except Exception:
+            time.sleep(1)
+   
+    job_id = response['JobId']
+    print(job_id)
+   
+    while True:
+        try:
+            # get results from textract job
+            response = textract_client.get_document_text_detection(JobId=job_id)
+            status = response['JobStatus']
+            if status in ['SUCCEEDED', 'FAILED']:
+                break
+        except Exception:
+            time.sleep(1)
+   
+    print(status)
+   
+    # verify license number complies format
+    if status == 'SUCCEEDED':
+        text = ''
+        for item in response['Blocks']:
+            if item['BlockType'] == 'LINE':
+                text += item['Text']
+               
+        text = text.upper().replace(' ', '').replace('\n', '')
+        print(text)
+        text=format_license(text)
+        license_plate_number_ = text
+       
+       
+    else:
+        # TODO: implement !
+        pass
+ 
+    # plate_number = event.get('plate_number')
+    # current_date = datetime.datetime.now().date().isoformat()  # Get the current date in ISO 8601 format YYYY-MM-DD
+    current_date = datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M:%S')  # Get the current UTC date and time in ISO 8601 format YYYY-MM-DD HH:MM:SS
+    #print(current_date)
+ 
+    # Connect to the database
+    client = boto3.client('rds-data')
+ 
+    # Retrieve the exported values using the AWS SDK
+    cfn_client = boto3.client('cloudformation')
+    response = cfn_client.describe_stacks(StackName='prod-codecatalyst-sst-app-DBStack')
+    outputs = response['Stacks'][0]['Outputs']
+ 
+    dbSecretArn = ''
+    dbClusterARN = ''
+ 
+    for output in outputs:
+        if output['OutputKey'] == 'SSTMetadata':
+            sst_metadata = output['OutputValue']
+            # Parse the SSTMetadata JSON string to extract the required information
+            sst_metadata_dict = json.loads(sst_metadata)
+            for item in sst_metadata_dict['metadata']:
+                if item['id'] == 'ExistingDatabase':
+                    dbSecretArn = item['data']['secretArn']
+                    dbClusterARN = item['data']['clusterArn']
+                if item['id'] == 'MainDatabase':
+                    dbSecretArn = item['data']['secretArn']
+                    dbClusterARN = item['data']['clusterArn']
+            break  # Exit the loop once the required information is found
+ 
+    #print("dbSecretArn",dbSecretArn)
+    #print("dbClusterIdentifier",dbClusterARN)    
+ 
+    # Query the database if ARNs are not empty
+    if dbSecretArn and dbClusterARN:
+        # sql = "INSERT INTO violations (violation_id, plate_number, timestamp) VALUES (:car_id, :license_plate_number, :timestamp)"
+        sql = "INSERT INTO violations (plate_number, type , latitude, longitude,timestamp, image_key, status) VALUES (:license_plate_number_, :type, :latitude, :longitude, :timestamp, :image_key, :status)"
+        response = client.execute_statement(
+            resourceArn=dbClusterARN,
+            secretArn=dbSecretArn,
+            database='maindb',
+            sql=sql,
+            parameters=[
+             {'name': 'car_id', 'value': {'longValue': 1}},
+             {'name': 'license_plate_number_', 'value': {'stringValue': license_plate_number_}},
+             {'name': 'type', 'value': {'stringValue': 'Yellow Lane'}},
+             {'name': 'longitude', 'value': {'longValue': 26.054315}},  
+             {'name': 'latitude', 'value': {'longValue': 50.537455}},  
+             {'name': 'timestamp', 'value': {'stringValue': current_date}},
+             {'name': 'image_key', 'value': {'stringValue': filename}},
+             {'name': 'status', 'value': {'stringValue': 'review'}},
+    ]
+ 
+        )
+ 
+    return {
+        'statusCode': 200,
+        'body': json.dumps('Data inserted into RDS successfully!')
+    }
