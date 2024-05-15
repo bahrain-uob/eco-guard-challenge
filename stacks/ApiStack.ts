@@ -6,70 +6,94 @@ import { Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
 import * as iam from "aws-cdk-lib/aws-iam";
 
 export function ApiStack({ stack }: StackContext) {
+  const { db } = use(DBStack);
 
-    const {db} = use(DBStack);
-
-    // Create a Role with service Principal Lambda
-    const lambdaToRDSRole = new iam.Role(this, "lambdaToRDSRole", {
+  // Create a Role with service Principal Lambda
+  const lambdaToRDSRole = new iam.Role(this, "lambdaToRDSRole", {
     assumedBy: new iam.ServicePrincipal("lambda.amazonaws.com"),
-    });
+  });
 
-    // Path to your Lambda function handler
-    const lambdaHandlerPath = 'packages/functions/src/sample-python-lambda/checkCarRegistration.py';
+  // Path to your Lambda function handler
+  const lambdaHandlerPath =
+    "packages/functions/src/sample-python-lambda/checkCarRegistration.py";
 
-   // Attach Inline Policies to role created by lambda in previous step.
-   lambdaToRDSRole.attachInlinePolicy(
+  // Attach Inline Policies to role created by lambda in previous step.
+  lambdaToRDSRole.attachInlinePolicy(
     new iam.Policy(this, "lambdaToRD", {
       statements: [
         new iam.PolicyStatement({
-           //Effect: "Allow",
-           actions: ["cloudformation:DescribeStacks"],
-           resources: ["*"],
+          //Effect: "Allow",
+          actions: ["cloudformation:DescribeStacks"],
+          resources: ["*"],
         }),
       ],
     })
   );
-  
+  // Create the HTTP API
+  const api = new Api(stack, "Api", {
+    defaults: {
+      authorizer: "iam",
+      function: {
+        // Bind the db name to our API
+        bind: [db],
+      },
+    },
+    routes: {
+      // Sample TypeScript lambda function
+      "POST /": "packages/functions/src/lambda.main",
+      // Sample Pyhton lambda function
+      "GET /": {
+        function: {
+          handler: "packages/functions/src/sample-python-lambda/lambda.main",
+          //handler: "packages/functions/src/sample-python-lambda/checkCarRegistration.lambda_handler",  ///to check if the car registered or not
 
-    // Create the HTTP API
-    const api = new Api(stack, "Api", {
-        defaults: {
-            authorizer: "iam",
-            function: {
-                // Bind the db name to our API
-                bind: [db],
-            },
+          runtime: "python3.11",
+          timeout: "60 seconds",
+          // Set the IAM role for the checkCarRegistration.py" Lambda function
+          //role: lambdaToRDSRole    // allow checkCarRegistration.py function to assume the role
         },
-        routes: {
-            // Sample TypeScript lambda function
-            "POST /": "packages/functions/src/lambda.main",
-            // Sample Pyhton lambda function
-            "GET /": {
-                function: {
-                    handler: "packages/functions/src/sample-python-lambda/lambda.main",
-                    //handler: "packages/functions/src/sample-python-lambda/checkCarRegistration.lambda_handler",  ///to check if the car registered or not
+      },
+    },
+  });
 
-                    runtime: "python3.11",
-                    timeout: "60 seconds",
-                    // Set the IAM role for the checkCarRegistration.py" Lambda function
-                    //role: lambdaToRDSRole    // allow checkCarRegistration.py function to assume the role 
-                },
-            },
-            
-        }
-    });
-    // cache policy to use with cloudfront as reverse proxy to avoid cors
-    // https://dev.to/larswww/real-world-serverless-part-3-cloudfront-reverse-proxy-no-cors-cgj
-    const apiCachePolicy = new CachePolicy(stack, "CachePolicy", {
-        minTtl: Duration.seconds(0), // no cache by default unless backend decides otherwise
-        defaultTtl: Duration.seconds(0),
-        headerBehavior: CacheHeaderBehavior.allowList(
-        "Accept",
-        "Authorization",
-        "Content-Type",
-        "Referer"
-        ),
-    });
+  // Create the HTTP API to get RDS data
+  const apiRDS = new Api(stack, "ApiRDS", {
+    defaults: {
+      //authorizer: "iam",
+      function: {
+        // Bind the db name to our API
+        bind: [db],
+      },
+    },
+    routes: {
+      "GET /": {
+        function: {
+          handler:
+            "packages/functions/src/sample-python-lambda/getViolations.lambda_handler",
+          runtime: "python3.11",
+          timeout: "60 seconds",
+          role: lambdaToRDSRole, // allow lambda function to assume the role
+        },
+      },
+    },
+  });
 
-    return {api,apiCachePolicy}
+  // cache policy to use with cloudfront as reverse proxy to avoid cors
+  // https://dev.to/larswww/real-world-serverless-part-3-cloudfront-reverse-proxy-no-cors-cgj
+  const apiCachePolicy = new CachePolicy(stack, "CachePolicy", {
+    minTtl: Duration.seconds(0), // no cache by default unless backend decides otherwise
+    defaultTtl: Duration.seconds(0),
+    headerBehavior: CacheHeaderBehavior.allowList(
+      "Accept",
+      "Authorization",
+      "Content-Type",
+      "Referer"
+    ),
+  });
+
+  stack.addOutputs({
+    apiRDSUrl: apiRDS.url,
+  });
+
+  return { api, apiCachePolicy, apiRDS };
 }

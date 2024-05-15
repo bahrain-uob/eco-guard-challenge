@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { signOut } from 'aws-amplify/auth';
-import UserOne from '../../images/user/user-01.png';
-import {toast} from 'react-toastify'
+import UserOne from '../../images/user/user111.png';
+import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
 const DropdownUser = () => {
@@ -10,7 +10,7 @@ const DropdownUser = () => {
 
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
-  const navigate =useNavigate();
+  const navigate = useNavigate();
   const handleSignOut = async () => {
     try {
       await signOut();
@@ -59,9 +59,9 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            Thomas Anree
+            Violation Officer
           </span>
-          <span className="block text-xs">UX Designer</span>
+          <span className="block text-xs"></span>
         </span>
 
         <span className="h-12 w-12 rounded-full">
@@ -167,9 +167,10 @@ const DropdownUser = () => {
             </Link>
           </li>
         </ul>
-        <button 
-        className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
-        onClick={handleSignOut} >
+        <button
+          className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+          onClick={handleSignOut}
+        >
           <svg
             className="fill-current"
             width="22"
