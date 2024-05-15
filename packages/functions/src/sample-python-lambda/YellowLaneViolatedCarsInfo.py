@@ -6,19 +6,17 @@ import string
 from util import format_license
 import os
 import boto3
- 
- 
+
 def random_string():
     return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
- 
+
 region_name = 'us-east-1'
- 
+
 # define clients
 s3_client = boto3.client('s3', region_name=region_name)
 textract_client = boto3.client('textract', region_name=region_name)
- 
+
 def lambda_handler(event, context):
-   
     tic = time.time()
    
     # get object
@@ -72,16 +70,18 @@ def lambda_handler(event, context):
     else:
         # TODO: implement !
         pass
- 
-    # plate_number = event.get('plate_number')
-    # current_date = datetime.datetime.now().date().isoformat()  # Get the current date in ISO 8601 format YYYY-MM-DD
-    current_date = datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M:%S')  # Get the current UTC date and time in ISO 8601 format YYYY-MM-DD HH:MM:SS
-    #print(current_date)
- 
-    # Connect to the database
+
+    # Calculate the local time in Bahrain
+    current_utc_time = datetime.datetime.utcnow()
+    bahrain_offset = datetime.timedelta(hours=3)  # Bahrain is at UTC+3
+    current_date = (current_utc_time + bahrain_offset).strftime('%Y-%m-%d %H:%M:%S')
+    
+    # Set latitude and longitude with decimals
+    latitude = 26.054315
+    longitude = 50.537455
+    
+    # Connect to the database and execute SQL query
     client = boto3.client('rds-data')
- 
-    # Retrieve the exported values using the AWS SDK
     cfn_client = boto3.client('cloudformation')
     response = cfn_client.describe_stacks(StackName='prod-codecatalyst-sst-app-DBStack')
     outputs = response['Stacks'][0]['Outputs']
@@ -92,7 +92,6 @@ def lambda_handler(event, context):
     for output in outputs:
         if output['OutputKey'] == 'SSTMetadata':
             sst_metadata = output['OutputValue']
-            # Parse the SSTMetadata JSON string to extract the required information
             sst_metadata_dict = json.loads(sst_metadata)
             for item in sst_metadata_dict['metadata']:
                 if item['id'] == 'ExistingDatabase':
@@ -101,15 +100,10 @@ def lambda_handler(event, context):
                 if item['id'] == 'MainDatabase':
                     dbSecretArn = item['data']['secretArn']
                     dbClusterARN = item['data']['clusterArn']
-            break  # Exit the loop once the required information is found
+            break
  
-    #print("dbSecretArn",dbSecretArn)
-    #print("dbClusterIdentifier",dbClusterARN)    
- 
-    # Query the database if ARNs are not empty
     if dbSecretArn and dbClusterARN:
-        # sql = "INSERT INTO violations (violation_id, plate_number, timestamp) VALUES (:car_id, :license_plate_number, :timestamp)"
-        sql = "INSERT INTO violations (plate_number, type , latitude, longitude,timestamp, image_key, status) VALUES (:license_plate_number_, :type, :latitude, :longitude, :timestamp, :image_key, :status)"
+        sql = "INSERT INTO violations (plate_number, type, latitude, longitude, timestamp, image_key, status) VALUES (:license_plate_number_, :type, :latitude, :longitude, :timestamp, :image_key, :status)"
         response = client.execute_statement(
             resourceArn=dbClusterARN,
             secretArn=dbSecretArn,
@@ -119,15 +113,14 @@ def lambda_handler(event, context):
              {'name': 'car_id', 'value': {'longValue': 1}},
              {'name': 'license_plate_number_', 'value': {'stringValue': license_plate_number_}},
              {'name': 'type', 'value': {'stringValue': 'Yellow Lane'}},
-             {'name': 'longitude', 'value': {'longValue': 26.054315}},  
-             {'name': 'latitude', 'value': {'longValue': 50.537455}},  
+             {'name': 'longitude', 'value': {'doubleValue': longitude}},  
+             {'name': 'latitude', 'value': {'doubleValue': latitude}},  
              {'name': 'timestamp', 'value': {'stringValue': current_date}},
              {'name': 'image_key', 'value': {'stringValue': filename}},
              {'name': 'status', 'value': {'stringValue': 'review'}},
-    ]
- 
-        )
- 
+        ]
+    )
+
     return {
         'statusCode': 200,
         'body': json.dumps('Data inserted into RDS successfully!')
