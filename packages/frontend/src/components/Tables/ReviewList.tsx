@@ -12,6 +12,14 @@ interface RowData {
   image: string;     
   status: string; }
 
+interface ApiReturn{
+  violationData: RowData
+  total_violations:number;
+  yellow_lane:number;
+  unregisterd_car:number;
+  todays_violations:number;
+}
+
 const ReviewList: React.FC = () => {
   const [data, setData] = useState<RowData[][]>([]);
 
@@ -21,9 +29,10 @@ const ReviewList: React.FC = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get<RowData[][]>('https://eck20zaeo3.execute-api.us-east-1.amazonaws.com');
-      setData(response.data);
+      const response = await axios.get<ApiReturn[][]>('https://8lbpgbhy0e.execute-api.us-east-1.amazonaws.com');
+      setData(response.data.violationData);
       console.log(response.data)
+      console.log(response.data.violationData)
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -73,7 +82,8 @@ const ReviewList: React.FC = () => {
               {rowData.slice(7).map((cellData, cellIndex) => (
                 <td key={cellIndex} className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                   {Object.entries(cellData).map(([key, value]) => (
-                  <p
+            
+                  <button
                     className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium ${
                       `${value}` === 'aproved'
                         ? 'bg-success text-success'
@@ -83,7 +93,7 @@ const ReviewList: React.FC = () => {
                     }`}
                   >
                   {`${value}`}
-                  </p>
+                  </button>
                   ))}
                 </td>
                  ))}
