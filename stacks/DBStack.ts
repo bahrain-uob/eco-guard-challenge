@@ -4,6 +4,7 @@ import * as rds from "aws-cdk-lib/aws-rds";
 import * as secretsManager from "aws-cdk-lib/aws-secretsmanager";
 import * as path from 'path';
 import { Fn } from "aws-cdk-lib";
+import { Duration } from "aws-cdk-lib";
 
 export function DBStack({ stack, app }: StackContext) {
  
@@ -11,8 +12,23 @@ export function DBStack({ stack, app }: StackContext) {
 const bucket1 = new Bucket(stack, "yellow-lane-plate-numbers");
 const bucket2 = new Bucket(stack, "yellow-lane-violations-bucket");
 
+// const checkCarRegistration = new lambda.Function(this, 'checkCarRegistration', { 
+//     runtime: lambda.Runtime.PYTHON_3_9,
+//     handler: '../packages/functions/src/sample-python-lambda'
+//     });
+
 //Create Unregsistered LP Bucket
-const Unregsistered_bucket = new Bucket(stack, "Alpr-detection-bucket");
+const Unregsistered_bucket = new Bucket(stack, "Alpr-detection-bucket", {
+    cdk: {
+      bucket: {
+        lifecycleRules: [
+          {
+            expiration: Duration.hours(24),
+          },
+        ],
+      },
+    },
+  });
  
     const object_table = new Table(stack, "Object_detection_and_tracking", {
         fields: {
@@ -33,15 +49,16 @@ const Unregsistered_bucket = new Bucket(stack, "Alpr-detection-bucket");
         primaryIndex: { partitionKey: "fragment_number", sortKey: "y1"},
     });
 
-    const Unregsistered_table = new Table(stack, "Unregistered_license_plates", {
+    const Unregsistered_table = new Table(stack, "license_plate_numbers", {
         fields: {
         car_id: "string",
         license_plate_number: "string",
         time: "number",
         },
         primaryIndex: { partitionKey: "car_id"},
+        stream: "new_image", //Enable DynamoDB streams and capture new images
     });
-
+ 
 
     // Create an RDS database
     const mainDBLogicalName = "MainDatabase";
@@ -92,6 +109,8 @@ const Unregsistered_bucket = new Bucket(stack, "Alpr-detection-bucket");
         bucket1,
         db,
         bucket2,
+        object_table,
         Unregsistered_bucket,
+        Unregsistered_table,
     };
 }
