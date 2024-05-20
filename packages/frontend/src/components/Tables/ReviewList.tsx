@@ -1,23 +1,26 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import PrintPage from './Print';
+import FormLayout from './pages/Form/FormLayout';
 
-interface RowData {     
-  id: number;     
-  plateNumber: string;     
-  violationType: string;     
-  latitude: number;     
-  longitude: number;     
-  dateTime: string;     
-  image: string;     
-  status: string; }
+interface RowData {
+  id: number;
+  plateNumber: string;
+  violationType: string;
+  latitude: number;
+  longitude: number;
+  dateTime: string;
+  image: string;
+  status: string;
+}
 
-interface ApiReturn{
-  violationData: RowData
-  total_violations:number;
-  yellow_lane:number;
-  unregisterd_car:number;
-  todays_violations:number;
+interface ApiReturn {
+  violationData: RowData;
+  total_violations: number;
+  yellow_lane: number;
+  unregisterd_car: number;
+  todays_violations: number;
 }
 
 const ReviewList: React.FC = () => {
@@ -29,10 +32,12 @@ const ReviewList: React.FC = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get<ApiReturn[][]>('https://8lbpgbhy0e.execute-api.us-east-1.amazonaws.com');
+      const response = await axios.get<ApiReturn[][]>(
+        'https://8lbpgbhy0e.execute-api.us-east-1.amazonaws.com',
+      );
       setData(response.data.violationData);
-      console.log(response.data)
-      console.log(response.data.violationData)
+      console.log(response.data);
+      console.log(response.data.violationData);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -48,7 +53,7 @@ const ReviewList: React.FC = () => {
                 License plate No.
               </th>
               <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
-               Type
+                Type
               </th>
               <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
                 latitude
@@ -57,54 +62,60 @@ const ReviewList: React.FC = () => {
                 longtitude
               </th>
               <th className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
-              timestamp
+                timestamp
               </th>
               <th className="py-4 px-4 font-medium text-black dark:text-white">
                 image
               </th>
               <th className="py-4 px-4 font-medium text-black dark:text-white">
-               status
+                status
               </th>
             </tr>
           </thead>
           <tbody>
             {data.map((rowData, rowIndex) => (
               <tr key={rowIndex}>
-      {rowData.slice(1, -1).map((cellData, cellIndex) => (
-  <td key={cellIndex} className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-    {Object.entries(cellData).map(([key, value]) => (
-      <p key={key} className="text-black dark:text-white">
-        {`${value}`}
-      </p>
-    ))}
-  </td>
-))}
-              {rowData.slice(7).map((cellData, cellIndex) => (
-                <td key={cellIndex} className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  {Object.entries(cellData).map(([key, value]) => (
-            
-                  <button
-                    className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium ${
-                      `${value}` === 'aproved'
-                        ? 'bg-success text-success'
-                        : `${value}` === 'rejected'
-                        ? 'bg-danger text-danger'
-                        : 'bg-warning text-warning'
-                    }`}
+                {rowData.slice(1, -1).map((cellData, cellIndex) => (
+                  <td
+                    key={cellIndex}
+                    className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11"
                   >
-                  {`${value}`}
-                  </button>
-                  ))}
-                </td>
-                 ))}
-
+                    {Object.entries(cellData).map(([key, value]) => (
+                      <p key={key} className="text-black dark:text-white">
+                        {`${value}`}
+                      </p>
+                    ))}
+                  </td>
+                ))}
+                {rowData.slice(7).map((cellData, cellIndex) => (
+                  <td
+                    key={cellIndex}
+                    className="border-b border-[#eee] py-5 px-4 dark:border-strokedark"
+                  >
+                    {Object.entries(cellData).map(([key, value]) => (
+                      <Link to="FormLayout">
+                        <button
+                          className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium ${
+                            `${value}` === 'aproved'
+                              ? 'bg-success text-success '
+                              : `${value}` === 'rejected'
+                                ? 'bg-danger text-danger'
+                                : 'bg-warning text-warning'
+                          }`}
+                          disabled={value === 'aproved' || value === 'rejected'}
+                        >
+                          {`${value}`}
+                        </button>
+                      </Link>
+                    ))}
+                  </td>
+                ))}
 
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                   <div className="flex items-center space-x-3.5">
                     <PrintPage />
                   </div>
                 </td>
-               
               </tr>
             ))}
           </tbody>

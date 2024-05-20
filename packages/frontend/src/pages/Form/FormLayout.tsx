@@ -1,116 +1,99 @@
 import { Link } from 'react-router-dom';
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
-import  { useState } from 'react';
-import { FaRegEdit } from "react-icons/fa";
-import { IoIosArrowBack } from "react-icons/io";
-import { IoMdCheckmarkCircle } from "react-icons/io";
-import { IoMdCloseCircle } from "react-icons/io";
+import SelectGroupOne from '../../components/Forms/SelectGroup/SelectGroupOne';
 import DefaultLayout from '../../layout/DefaultLayout';
+import UserOne from '../../images/user/user111.png';
+//import { BiCheckCircle } from "react-icons/bi";
+import { IoMdCheckmarkCircle } from 'react-icons/io';
+import { IoMdCloseCircle } from 'react-icons/io';
 
 const FormLayout = () => {
-  const [disabled, setDisabled] = useState(true);
-  const toggleDisabled = () => {
-    setDisabled(prevDisabled => !prevDisabled);
-  };
   return (
     <DefaultLayout>
-      <Breadcrumb pageName=" " />
-    
-    <div className="flex flex-col bg-zinc-100 bg-opacity-90 overflow-x-hidden ">
+      <Breadcrumb pageName="Violations details" />
 
-      <div className="flex gap-5 ml-32 w-full max-md:flex-wrap max-md:max-w-full mt-20">
-       
-        <div className="flex flex-col grow shrink-0 self-start mt-6 basis-0 w-fit max-md:max-w-full">
-    
-          <div className="mt-20 max-md:mt-10 max-md:max-w-full ml-12">
-            <div className="  flex gap-0 max-md:flex-col max-md:gap-0 pb-40">
-              <div className=" drop-shadow-xl flex flex-col w-6/12 max-md:ml-0 max-md:w-full">
-                <div className=" flex overflow-hidden relative flex-col grow justify-center px-2.5 py-20 min-h-[536px] max-md:max-w-full rounded-lg">
-                  <img
-                    loading="lazy"
-                   
-                    className="object-cover absolute inset-0 size-full"
-                  />
-                  <div className="flex relative gap-3 justify-between mt-40 max-md:flex-wrap max-md:mt-10 max-md:max-w-full">
-                    
-                   
+      <div className="grid grid-cols-1 gap-9 sm:grid-cols-2">
+        <div className="flex flex-col gap-9">
+          {/* <!-- Contact Form --> */}
+          <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+            <form action="#">
+              <div className="p-6.5">
+                <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+                  <div className="w-full xl:w-1/2">
+                    <label className="mb-2.5 block text-black dark:text-white">
+                      Licsence Plate No.
+                    </label>
+                    <input
+                      type="text"
+                      value='56778'
+                      placeholder="Enter your first name"
+                      className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                    />
                   </div>
                 </div>
+
+                <div className="mb-4.5">
+                  <label className="mb-2.5 block text-black dark:text-white">
+                    Type
+                  </label>
+                  <input
+                    type="email"
+                    placeholder="Enter your email address"
+                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  />
+                </div>
+
+                <div className="mb-4.5">
+                  <label className="mb-2.5 block text-black dark:text-white">
+                    Location
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Select subject"
+                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  />
+                </div>
+                <div className="mb-4.5">
+                  <label className="mb-2.5 block text-black dark:text-white">
+                    Timestamp
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Select subject"
+                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  />
+                </div>
+
+                <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
+                  Send Message
+                </button>
               </div>
-              
-              
-              <div className="flex flex-col  w-4/12 max-md:ml-0 max-md:w-full ">
-              <div className=" drop-shadow-xl grow items-end px-3 pt-16 pb-5 w-full bg-white  text-neutral-800 max-md:px-5 max-md:max-w-full rounded-lg ">
-                
-                <table className="table-auto w-full ">
-                   
-                       <tr className="border-solid border-b-2 border-grey ">
-                          <th className="py-4 " >License Plate </th>
-                          <td className="">
-                             <input value="343434" disabled = {disabled}  ></input>
-                            </td>
-                          
-                       </tr>
-                       <tr className="border-solid border-b-2 border-grey my-4">
-                         <th className="py-4">Car Description</th>
-                         <td>
-                          <input value="Audi A6 Saloon,Black" disabled = {disabled}></input>
-                          </td>
-                         
-                       </tr>
-                       <tr className="border-solid border-b-2 border-grey">
-                         <th className="py-4">Timestamp</th>
-                         <td>
-                           <input value="Wednesday, 03-Apr-24 09:12:17 UTC"  disabled = {disabled}></input>
-                          </td>
-                         
-                       </tr>
-                       <tr className="border-solid border-b-2 border-grey">
-                         <th className="py-4">Location</th>
-                         <td>
-                           <input value="089 Kutch Green Apt. 448" disabled = {disabled}></input>
-                          </td>
-                         
-                       </tr>
-                       <tr className="border-solid border-b-2 border-grey">
-                         <th className="py-4">Type</th>
-                         <td>
-                         <input value="Tailgating" disabled = {disabled}></input>
-                         </td>
-                         
-                       </tr>
-                </table>
-                <table className="table-auto w-full ml-18 ">
-                  <tr className="">
-                    <td>
-                    <button onClick={toggleDisabled} className=""  >
-                    <FaRegEdit className="text-3xl" />
-                          
-                          
-                          </button> 
-                    </td>
-                  </tr>
-                </table>
-                  <div className="flex gap-5 justify-between mt-6 ">
-                    <button className="flex-1  ">
-                    <IoMdCheckmarkCircle  className="text-6xl text-green-600 hover:text-green-700 ml-40" />
-                    </button >
-                    
-                    <button className="flex-1 ">
-                    <IoMdCloseCircle  className="text-6xl text-red-600  hover:text-red-700 text-center" />
-                    </button>
-                  </div>
+            </form>
+          </div>
+        </div>
 
+        <div className="flex flex-col gap-9">
+          {/* <!-- Sign In Form --> */}
+          <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+            <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
+              <h3 className="font-medium text-black dark:text-white">
+                Sign In Form
+              </h3>
+            </div>
 
-               </div> 
-              </div>
+            <img src={UserOne}></img>
+            <div className="flex gap-5 justify-between mt-6 ">
+              <button className="flex-1  ">
+                <IoMdCheckmarkCircle className="text-6xl text-green-600 hover:text-green-700 ml-40" />
+              </button>
 
+              <button className="flex-1 ">
+                <IoMdCloseCircle className="text-6xl text-red-600  hover:text-red-700 text-center" />
+              </button>
             </div>
           </div>
         </div>
       </div>
-    </div>
-     
     </DefaultLayout>
   );
 };
