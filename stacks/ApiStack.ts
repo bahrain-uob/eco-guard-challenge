@@ -8,7 +8,7 @@ import * as iam from "aws-cdk-lib/aws-iam";
 export function ApiStack({ stack }: StackContext) {
   const { db } = use(DBStack);
   const { Unregsistered_table} = use(DBStack);
-  const {bucket2} =use(DBStack);
+  const {bucket1} =use(DBStack);
 
   // Create a Role with service Principal Lambda
   const lambdaToRDSRole = new iam.Role(this, "lambdaToRDSRole", {
@@ -31,6 +31,17 @@ export function ApiStack({ stack }: StackContext) {
       ],
     })
   );
+
+// Basic execution role to check logs
+  const lambdaBasicExecutionRole = new iam.Role(this, 'LambdaBasicExecutionRole', {
+    assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
+    managedPolicies: [
+      iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
+    ],
+  });
+   
+  
+
   // Create the HTTP API
   const api = new Api(stack, "Api", {
     defaults: {
@@ -96,7 +107,7 @@ export function ApiStack({ stack }: StackContext) {
             "packages/functions/src/sample-python-lambda/checkCarRegistiration.lambda_handler",
           runtime: "python3.11",
           timeout: "60 seconds",
-          role: lambdaToRDSRole, // allow lambda function to assume the role
+          role: lambdaToRDSRole, lambdaBasicExecutionRole, // allow lambda function to assume the role
         },
       },
     },
@@ -108,7 +119,7 @@ export function ApiStack({ stack }: StackContext) {
       //authorizer: "iam",
       function: {
         // Bind the db name to our API
-        bind: [bucket2],
+        bind: [bucket1],
       },
     },
     routes: {
@@ -118,7 +129,7 @@ export function ApiStack({ stack }: StackContext) {
             "packages/functions/src/sample-python-lambda/YellowLaneViolatedCarsInfo.lambda_handler",
           runtime: "python3.11",
           timeout: "60 seconds",
-          role: lambdaToRDSRole, // allow lambda function to assume the role
+          role: lambdaToRDSRole, lambdaBasicExecutionRole,// allow lambda function to assume the role
         },
       },
     },
