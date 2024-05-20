@@ -84,6 +84,18 @@ def lambda_handler(event, context):
                     current_date = datetime.datetime.now().date().isoformat()
                     if current_date > registration_date_expiration:
                         print(f"The car with plate number {license_plate_number} is not registered.")
+                     #### Insert unregistered car into violations table
+                        insert_sql = f"""
+                            INSERT INTO violations (plate_number, type, latitude, longitude, timestamp, image_key, status)
+                            VALUES ('{license_plate_number}', 'unregistered_car', NULL, NULL, NULL, NULL, 'in-review')
+                        """
+                       
+                        client.execute_statement(
+                            resourceArn=dbClusterARN,
+                            secretArn=dbSecretArn,
+                            database='maindb',
+                            sql=insert_sql
+                        )
                     else:
                         print(f"The car with plate number {license_plate_number} is registered.")
                 else:

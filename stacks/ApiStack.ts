@@ -7,6 +7,7 @@ import * as iam from "aws-cdk-lib/aws-iam";
 
 export function ApiStack({ stack }: StackContext) {
   const { db } = use(DBStack);
+  const { Unregsistered_table} = use(DBStack);
 
   // Create a Role with service Principal Lambda
   const lambdaToRDSRole = new iam.Role(this, "lambdaToRDSRole", {
@@ -56,7 +57,7 @@ export function ApiStack({ stack }: StackContext) {
     },
   });
 
-  // Create the HTTP API to get RDS data
+  // Create the HTTP API to get RDS data //getviolations function
   const apiRDS = new Api(stack, "ApiRDS", {
     defaults: {
       //authorizer: "iam",
@@ -70,6 +71,28 @@ export function ApiStack({ stack }: StackContext) {
         function: {
           handler:
             "packages/functions/src/sample-python-lambda/getViolations.lambda_handler",
+          runtime: "python3.11",
+          timeout: "60 seconds",
+          role: lambdaToRDSRole, // allow lambda function to assume the role
+        },
+      },
+    },
+  });
+
+  // get data from dynamo to rds
+  const apiDynamo = new Api(stack, "ApiDynamo", {
+    defaults: {
+      //authorizer: "iam",
+      function: {
+        // Bind the db name to our API
+        bind: [Unregsistered_table],
+      },
+    },
+    routes: {
+      "POST /": {
+        function: {
+          handler:
+            "packages/functions/src/sample-python-lambda/checkCarRegistiration.lambda_handler",
           runtime: "python3.11",
           timeout: "60 seconds",
           role: lambdaToRDSRole, // allow lambda function to assume the role
@@ -95,5 +118,5 @@ export function ApiStack({ stack }: StackContext) {
     apiRDSUrl: apiRDS.url,
   });
 
-  return { api, apiCachePolicy, apiRDS };
+  return { api, apiCachePolicy, apiRDS , apiDynamo };
 }
