@@ -32,15 +32,14 @@ export function ApiStack({ stack }: StackContext) {
     })
   );
 
-// Basic execution role to check logs
-  const lambdaBasicExecutionRole = new iam.Role(this, 'LambdaBasicExecutionRole', {
-    assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
-    managedPolicies: [
-      iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
-    ],
-  });
-   
-  
+// Basic execution role
+const lambdaBasicExecutionRole = new iam.Role(this, 'LambdaBasicExecutionRole', {
+  assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
+  managedPolicies: [
+    iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
+  ],
+});
+ 
 
   // Create the HTTP API
   const api = new Api(stack, "Api", {
