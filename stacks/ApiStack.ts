@@ -8,6 +8,7 @@ import * as iam from "aws-cdk-lib/aws-iam";
 export function ApiStack({ stack }: StackContext) {
   const { db } = use(DBStack);
   const { Unregsistered_table} = use(DBStack);
+  const {bucket2} =use(DBStack);
 
   // Create a Role with service Principal Lambda
   const lambdaToRDSRole = new iam.Role(this, "lambdaToRDSRole", {
@@ -101,6 +102,28 @@ export function ApiStack({ stack }: StackContext) {
     },
   });
 
+  // S3 trigger to yellowLaneLambda function
+  const apiS3Yellow = new Api(stack, "ApiS3Yellow", {
+    defaults: {
+      //authorizer: "iam",
+      function: {
+        // Bind the db name to our API
+        bind: [bucket2],
+      },
+    },
+    routes: {
+      "POST /": {
+        function: {
+          handler:
+            "packages/functions/src/sample-python-lambda/YellowLaneViolatedCarsInfo.lambda_handler",
+          runtime: "python3.11",
+          timeout: "60 seconds",
+          role: lambdaToRDSRole, // allow lambda function to assume the role
+        },
+      },
+    },
+  });
+
   // cache policy to use with cloudfront as reverse proxy to avoid cors
   // https://dev.to/larswww/real-world-serverless-part-3-cloudfront-reverse-proxy-no-cors-cgj
   const apiCachePolicy = new CachePolicy(stack, "CachePolicy", {
@@ -118,5 +141,5 @@ export function ApiStack({ stack }: StackContext) {
     apiRDSUrl: apiRDS.url,
   });
 
-  return { api, apiCachePolicy, apiRDS , apiDynamo };
+  return { api, apiCachePolicy, apiRDS , apiDynamo, apiS3Yellow};
 }
