@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import PrintPage from './Print';
-import FormLayout from './pages/Form/FormLayout';
 
 interface RowData {
   id: number;
@@ -36,8 +35,6 @@ const ReviewList: React.FC = () => {
         'https://8lbpgbhy0e.execute-api.us-east-1.amazonaws.com',
       );
       setData(response.data.violationData);
-      console.log(response.data);
-      console.log(response.data.violationData);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -93,7 +90,8 @@ const ReviewList: React.FC = () => {
                     className="border-b border-[#eee] py-5 px-4 dark:border-strokedark"
                   >
                     {Object.entries(cellData).map(([key, value]) => (
-                      <Link to="FormLayout">
+                     
+                     <Link to={`../forms/form-layout/${1}`}>
                         <button
                           className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium ${
                             `${value}` === 'aproved'
