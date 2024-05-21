@@ -30,7 +30,9 @@ interface ApiReturn {
 const FormLayout: React.FC = () => {
   const [data, setData] = useState<RowData[][]>([]);
   const { id } = useParams<{ id: string }>();
-
+  const handleApprove = () => {
+    alert('The violation is approved');
+  };
   useEffect(() => {
     fetchData();
   });
@@ -108,27 +110,25 @@ const FormLayout: React.FC = () => {
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                   />
                 </div>
-              <Link to="..\..\..\Tables">
+              
               <div className="flex gap-5 justify-between mt-6 ">
-                <button className="flex-1  ">
+                <button className="flex-1  " onClick={handleApprove}>
                 <IoMdCheckmarkCircle className="text-6xl text-green-600 hover:text-green-700 ml-40" />
               </button>
               <button className="flex-1 " >
                 <IoMdCloseCircle className="text-6xl text-red-600  hover:text-red-700 text-center" />
               </button>
               </div>
-              </Link>
               </div>
             </form>
           </div>
         </div>
 
         <div className="flex flex-col gap-9">
-          {/* <!-- Sign In Form --> */}
-          <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-            <img src={UserOne}></img>
-            
-          </div>
+
+  <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark overflow-hidden">
+    <img src={UserOne} className="w-full h-full object-cover" />
+      </div>
         </div>
       </div>
     </DefaultLayout>
