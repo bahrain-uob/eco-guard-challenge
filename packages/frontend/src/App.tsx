@@ -91,10 +91,10 @@ function App() {
           }
         />
         <Route
-          path="/forms/form-layout"
+          path="/forms/form-layout/:param"
           element={
             <>
-              <PageTitle title="Form Layout | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <PageTitle title="Review | DashCop" />
               <FormLayout />
             </>
           }

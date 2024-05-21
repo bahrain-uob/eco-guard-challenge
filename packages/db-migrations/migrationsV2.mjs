@@ -62,8 +62,8 @@ await db
     },
     {    
       violation_id:2,
-      plate_number: '434277',
-      type: 'unregisterd car',
+      plate_number: '537018',
+      type: 'yellow lane',
       latitude: 26.054315,
       longitude: 50.537455,
       timestamp:"2024-04-24 15:45:30",

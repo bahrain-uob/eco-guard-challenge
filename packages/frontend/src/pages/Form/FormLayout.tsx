@@ -1,13 +1,53 @@
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
-import SelectGroupOne from '../../components/Forms/SelectGroup/SelectGroupOne';
 import DefaultLayout from '../../layout/DefaultLayout';
-import UserOne from '../../images/user/user111.png';
+import UserOne from '../../images/user/evidence1.jpg';
 //import { BiCheckCircle } from "react-icons/bi";
 import { IoMdCheckmarkCircle } from 'react-icons/io';
 import { IoMdCloseCircle } from 'react-icons/io';
+import axios from 'axios';
+import { useState, useEffect } from 'react';
 
-const FormLayout = () => {
+
+interface RowData {
+  id: number;
+  plateNumber: string;
+  violationType: string;
+  latitude: number;
+  longitude: number;
+  dateTime: string;
+  image: string;
+  status: string;
+}
+
+interface ApiReturn {
+  violationData: RowData;
+  total_violations: number;
+  yellow_lane: number;
+  unregisterd_car: number;
+  todays_violations: number;
+}
+const FormLayout: React.FC = () => {
+  const [data, setData] = useState<RowData[][]>([]);
+  const { id } = useParams<{ id: string }>();
+
+  useEffect(() => {
+    fetchData();
+  });
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get<ApiReturn[][]>(
+        'https://8lbpgbhy0e.execute-api.us-east-1.amazonaws.com',
+      );
+      const matchedData = response.data.violationData.find(item => item.id === Number(id));
+      setData(matchedData || null);
+      console.log(matchedData)
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
   return (
     <DefaultLayout>
       <Breadcrumb pageName="Violations details" />
@@ -25,7 +65,8 @@ const FormLayout = () => {
                     </label>
                     <input
                       type="text"
-                      value='56778'
+                      value="537018"
+                      disabled
                       placeholder="Enter your first name"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
@@ -37,7 +78,9 @@ const FormLayout = () => {
                     Type
                   </label>
                   <input
-                    type="email"
+                    type="text"
+                    value="yellow lane"
+                    disabled
                     placeholder="Enter your email address"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                   />
@@ -48,8 +91,9 @@ const FormLayout = () => {
                     Location
                   </label>
                   <input
-                    type="text"
-                    placeholder="Select subject"
+                    type="link"
+                    value="https://maps.app.goo.gl/HagcVYvik2RrV71G9"
+                    readOnly
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                   />
                 </div>
@@ -58,15 +102,22 @@ const FormLayout = () => {
                     Timestamp
                   </label>
                   <input
+                    disabled
                     type="text"
-                    placeholder="Select subject"
+                    value="2024-04-24 15:45:30"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                   />
                 </div>
-
-                <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
-                  Send Message
-                </button>
+              <Link to="..\..\..\Tables">
+              <div className="flex gap-5 justify-between mt-6 ">
+                <button className="flex-1  ">
+                <IoMdCheckmarkCircle className="text-6xl text-green-600 hover:text-green-700 ml-40" />
+              </button>
+              <button className="flex-1 " >
+                <IoMdCloseCircle className="text-6xl text-red-600  hover:text-red-700 text-center" />
+              </button>
+              </div>
+              </Link>
               </div>
             </form>
           </div>
@@ -75,22 +126,8 @@ const FormLayout = () => {
         <div className="flex flex-col gap-9">
           {/* <!-- Sign In Form --> */}
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-            <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-              <h3 className="font-medium text-black dark:text-white">
-                Sign In Form
-              </h3>
-            </div>
-
             <img src={UserOne}></img>
-            <div className="flex gap-5 justify-between mt-6 ">
-              <button className="flex-1  ">
-                <IoMdCheckmarkCircle className="text-6xl text-green-600 hover:text-green-700 ml-40" />
-              </button>
-
-              <button className="flex-1 ">
-                <IoMdCloseCircle className="text-6xl text-red-600  hover:text-red-700 text-center" />
-              </button>
-            </div>
+            
           </div>
         </div>
       </div>
