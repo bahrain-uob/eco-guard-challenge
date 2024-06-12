@@ -7,11 +7,11 @@ import { Fn } from "aws-cdk-lib";
 import { Duration } from "aws-cdk-lib";
 
 export function DBStack({ stack, app }: StackContext) {
-    
+
     const Unregsistered_bucket = new Bucket(stack, "Alpr-detection-bucket", {
         notifications: [
             {
-                function: "src/sample-python-lambda/UnregisteredLPDetection.py",
+                function: "packages/functions/src/sample-python-lambda/UnregisteredLPDetection.py",
                 events: ["object_created"],
             },
         ],
@@ -29,7 +29,7 @@ export function DBStack({ stack, app }: StackContext) {
     const bucket1 = new Bucket(stack, "yellow-lane-plate-numbers", {
         notifications: [
             {
-                function: "src/YellowLaneViolatedCarsInfo.py",
+                function: "packages/functions/src/sample-python-lambda/YellowLaneViolatedCarsInfo.py",
                 events: ["object_created"],
             },
         ],
@@ -38,12 +38,13 @@ export function DBStack({ stack, app }: StackContext) {
     const bucket2 = new Bucket(stack, "yellow-lane-violations-bucket", {
         notifications: [
             {
-                function: "src/YellowLaneViolatedCarsInfo.py",
+                function: "packages/functions/src/sample-python-lambda/YellowLaneViolatedCarsInfo.py",
                 events: ["object_created"],
             },
         ],
     });
- 
+
+    
     const object_table = new Table(stack, "Object_detection_and_tracking", {
         fields: {
         fragment_number: "string",
