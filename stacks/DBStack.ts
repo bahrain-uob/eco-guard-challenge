@@ -7,28 +7,42 @@ import { Fn } from "aws-cdk-lib";
 import { Duration } from "aws-cdk-lib";
 
 export function DBStack({ stack, app }: StackContext) {
- 
-//Create an S3 bucket
-const bucket1 = new Bucket(stack, "yellow-lane-plate-numbers");
-const bucket2 = new Bucket(stack, "yellow-lane-violations-bucket");
-
-// const checkCarRegistration = new lambda.Function(this, 'checkCarRegistration', { 
-//     runtime: lambda.Runtime.PYTHON_3_9,
-//     handler: '../packages/functions/src/sample-python-lambda'
-//     });
-
-//Create Unregsistered LP Bucket
-const Unregsistered_bucket = new Bucket(stack, "Alpr-detection-bucket", {
-    cdk: {
-      bucket: {
-        lifecycleRules: [
-          {
-            expiration: Duration.hours(24),
-          },
+    
+    const Unregsistered_bucket = new Bucket(stack, "Alpr-detection-bucket", {
+        notifications: [
+            {
+                function: "src/sample-python-lambda/UnregisteredLPDetection.py",
+                events: ["object_created"],
+            },
         ],
-      },
-    },
-  });
+        cdk: {
+            bucket: {
+                lifecycleRules: [
+                    {
+                        expiration: Duration.hours(24),
+                    },
+                ],
+            },
+        },
+    });
+
+    const bucket1 = new Bucket(stack, "yellow-lane-plate-numbers", {
+        notifications: [
+            {
+                function: "src/YellowLaneViolatedCarsInfo.py",
+                events: ["object_created"],
+            },
+        ],
+    });
+
+    const bucket2 = new Bucket(stack, "yellow-lane-violations-bucket", {
+        notifications: [
+            {
+                function: "src/YellowLaneViolatedCarsInfo.py",
+                events: ["object_created"],
+            },
+        ],
+    });
  
     const object_table = new Table(stack, "Object_detection_and_tracking", {
         fields: {
