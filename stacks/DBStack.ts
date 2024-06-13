@@ -4,7 +4,7 @@ import * as rds from "aws-cdk-lib/aws-rds";
 import * as secretsManager from "aws-cdk-lib/aws-secretsmanager";
 import * as path from 'path';
 import { Fn } from "aws-cdk-lib";
-import { Duration } from "aws-cdk-lib";
+// import { Duration } from "aws-cdk-lib";
 
 export function DBStack({ stack, app }: StackContext) {
 
@@ -34,10 +34,19 @@ export function DBStack({ stack, app }: StackContext) {
         },
       });
 
-      const bucket2 = new Bucket(stack, "Alpr-detection-bucket", {
+      const bucket1 = new Bucket(stack, "yellow-lane-plate-numbers", {
         notifications: {
           myNotification: {
-            function: "./packages/functions/src/sample-python-lambda/YellowLaneViolatedCarsInfo.py",
+            function: "packages/functions/src/sample-python-lambda/YellowLaneViolatedCarsInfo.py",
+            events: ["object_created"],
+          },
+        },
+      });
+
+      const bucket2 = new Bucket(stack, "yellow-lane-violations-bucket", {
+        notifications: {
+          myNotification: {
+            function: "packages/functions/src/sample-python-lambda/YellowLaneViolatedCarsInfo.py",
             events: ["object_created"],
           },
         },
@@ -122,6 +131,7 @@ export function DBStack({ stack, app }: StackContext) {
     return {
         db,
         bucket2,
+        bucket1,
         object_table,
         Unregsistered_bucket,
         Unregsistered_table,
