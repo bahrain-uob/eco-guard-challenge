@@ -34,53 +34,44 @@ export function DBStack({ stack, app }: StackContext) {
         },
       });
 
-    // const bucket1 = new Bucket(stack, "yellow-lane-plate-numbers", {
-    //     notifications: [
-    //         {
-    //             function: "./packages/functions/src/sample-python-lambda/YellowLaneViolatedCarsInfo.py",
-    //             events: ["object_created"],
-    //         },
-    //     ],
-    // });
-
-    // const bucket2 = new Bucket(stack, "yellow-lane-violations-bucket", {
-    //     notifications: [
-    //         {
-    //             function: "./packages/functions/src/sample-python-lambda/YellowLaneViolatedCarsInfo.py",
-    //             events: ["object_created"],
-    //         },
-    //     ],
-    // });
+      const bucket2 = new Bucket(stack, "Alpr-detection-bucket", {
+        notifications: {
+          myNotification: {
+            function: "./packages/functions/src/sample-python-lambda/YellowLaneViolatedCarsInfo.py",
+            events: ["object_created"],
+          },
+        },
+      });
 
     
-    // const object_table = new Table(stack, "Object_detection_and_tracking", {
-    //     fields: {
-    //     fragment_number: "string",
-    //     abs_frame_number: "number",
-    //     class_id: "number",
-    //     frame_number: "string",
-    //     track_id: "number",
-    //     x1: "number",
-    //     x1car: "number",
-    //     x2: "number",
-    //     x2car: "number",
-    //     y1: "number",
-    //     y1car: "number",
-    //     y2: "number",
-    //     y2car:"number",
-    //     },
-    //     primaryIndex: { partitionKey: "fragment_number", sortKey: "y1"},
-    // });
+    const object_table = new Table(stack, "Object_detection_and_tracking", {
+        fields: {
+        fragment_number: "string",
+        abs_frame_number: "number",
+        class_id: "number",
+        frame_number: "string",
+        track_id: "number",
+        x1: "number",
+        x1car: "number",
+        x2: "number",
+        x2car: "number",
+        y1: "number",
+        y1car: "number",
+        y2: "number",
+        y2car:"number",
+        },
+        primaryIndex: { partitionKey: "fragment_number", sortKey: "y1"},
+    });
 
-    // const Unregsistered_table = new Table(stack, "license_plate_numbers", {
-    //     fields: {
-    //     car_id: "string",
-    //     license_plate_number: "string",
-    //     time: "number",
-    //     },
-    //     primaryIndex: { partitionKey: "car_id"},
-    //     stream: "new_image", //Enable DynamoDB streams and capture new images
-    // });
+    const Unregsistered_table = new Table(stack, "license_plate_numbers", {
+        fields: {
+        car_id: "string",
+        license_plate_number: "string",
+        time: "number",
+        },
+        primaryIndex: { partitionKey: "car_id"},
+        stream: "new_image", //Enable DynamoDB streams and capture new images
+    });
  
 
     // Create an RDS database
@@ -129,11 +120,10 @@ export function DBStack({ stack, app }: StackContext) {
     }
 
     return {
-        // bucket1,
-        // db,
-        // bucket2,
-        // object_table,
+        db,
+        bucket2,
+        object_table,
         Unregsistered_bucket,
-        // Unregsistered_table,
+        Unregsistered_table,
     };
 }
