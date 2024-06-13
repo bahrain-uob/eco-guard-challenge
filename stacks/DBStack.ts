@@ -11,7 +11,7 @@ export function DBStack({ stack, app }: StackContext) {
     const Unregsistered_bucket = new Bucket(stack, "Alpr-detection-bucket", {
         notifications: [
             {
-                function: "packages/functions/src/sample-python-lambda/UnregisteredLPDetection.py",
+                function: "./packages/functions/src/sample-python-lambda/UnregisteredLPDetection.py",
                 events: ["object_created"],
             },
         ],
@@ -29,7 +29,7 @@ export function DBStack({ stack, app }: StackContext) {
     const bucket1 = new Bucket(stack, "yellow-lane-plate-numbers", {
         notifications: [
             {
-                function: "packages/functions/src/sample-python-lambda/YellowLaneViolatedCarsInfo.py",
+                function: "./packages/functions/src/sample-python-lambda/YellowLaneViolatedCarsInfo.py",
                 events: ["object_created"],
             },
         ],
@@ -38,7 +38,7 @@ export function DBStack({ stack, app }: StackContext) {
     const bucket2 = new Bucket(stack, "yellow-lane-violations-bucket", {
         notifications: [
             {
-                function: "packages/functions/src/sample-python-lambda/YellowLaneViolatedCarsInfo.py",
+                function: "./packages/functions/src/sample-python-lambda/YellowLaneViolatedCarsInfo.py",
                 events: ["object_created"],
             },
         ],
