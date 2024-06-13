@@ -11,7 +11,7 @@ export function DBStack({ stack, app }: StackContext) {
     const Unregsistered_bucket = new Bucket(stack, "Alpr-detection-bucket", {
         notifications: [
             {
-                function: "./packages/functions/src/sample-python-lambda/UnregisteredLPDetection.lambda_handler",
+                function: "functions/src/sample-python-lambda/UnregisteredLPDetection.lambda_handler",
                 events: ["object_created"],
             },
         ],
