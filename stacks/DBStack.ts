@@ -43,14 +43,14 @@ export function DBStack({ stack, app }: StackContext) {
         },
       });
 
-      const bucket2 = new Bucket(stack, "yellow-lane-violations-bucket", {
-        notifications: {
-          myNotification: {
-            function: "src/sample-python-lambda/YellowLaneViolatedCarsInfo.py",
-            events: ["object_created"],
-          },
-        },
-      });
+    //   const bucket2 = new Bucket(stack, "yellow-lane-violations-bucket", {
+    //     notifications: {
+    //       myNotification: {
+    //         function: "/packages/functions/src/sample-python-lambda/YellowLaneViolatedCarsInfo.py",
+    //         events: ["object_created"],
+    //       },
+    //     },
+    //   });
 
     
     const object_table = new Table(stack, "Object_detection_and_tracking", {
@@ -130,7 +130,7 @@ export function DBStack({ stack, app }: StackContext) {
 
     return {
         db,
-        bucket2,
+        // bucket2,
         bucket1,
         object_table,
         Unregsistered_bucket,
