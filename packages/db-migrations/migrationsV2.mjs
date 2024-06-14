@@ -10,13 +10,13 @@ await db
   .values([
     {
       registration_id: 1,
-      plate_number: '343434',
+      plate_number: '65267',
       registration_date: '2024-03-22',
       registration_date_expiration: '2025-03-22',
     },
     {
       registration_id: 2,
-      plate_number: '565656',
+      plate_number: '175777',
       registration_date: '2023-02-02',
       registration_date_expiration: '2024-02-02',
     },
@@ -52,12 +52,12 @@ await db
    .values([
     {    
       violation_id:1,
-      plate_number: '434277',
-      type: 'tailgating',
-      latitude: 26.224447,
-      longitude: 50.617151,
-      timestamp:"2024-04-24 15:45:30",
-      image_key: 'evidence/image1.jpg',
+      plate_number: '175777',
+      type: 'unregistered car', 
+      latitude: 26.185018,
+      longitude: 50.503507,
+      timestamp:"2024-05-13 12:39:43",
+      image_key: '1_91343852333181838466725509209824728477661450287_25_1.jpg  ',
       status: 'aproved',
     },
     {    
@@ -66,21 +66,53 @@ await db
       type: 'yellow lane',
       latitude: 26.054315,
       longitude: 50.537455,
-      timestamp:"2024-04-24 15:45:30",
-      image_key: 'evidence/image1.jpg',
+      timestamp:"2024-04-22 15:45:30",
+      image_key: '1_91343852333181838466725509209824728477661450287_25_1-2.jpg  ',
       status: 'review',
     },
     {    
       violation_id:3,
       plate_number: '434277',
-      type: 'tailgating',
-      latitude: 26.152973,
+      type: 'yellow lane', 
+      latitude: 26.228143,
       longitude: 50.474248,
-      timestamp:"2024-04-24 15:45:30",
-      image_key: 'evidence/image1.jpg',
+      timestamp:"2024-04-23 15:45:30",
+      image_key: '1_91343852333181838466725509209824728477661450287_25_1-2.jpg  ',
       status: 'rejected',
     },
+
+
+   {    
+    violation_id:4,
+    plate_number: '65267',
+    type: 'unregistered car', 
+    latitude: 26.231530,
+    longitude: 50.540233,
+    timestamp:"2024-04-25 15:45:30",
+    image_key: '10_91343852333181943617352446110357312894010686796_25_0.jpg  ',
+    status: 'aproved',
+  },
+  {    
+    violation_id:5,
+    plate_number: '537018',
+    type: 'yellow lane',
+    latitude: 26.054315,
+    longitude: 50.537455,
+    timestamp:"2024-04-20 15:45:30",
+    image_key: '1_91343852333181838466725509209824728477661450287_25_1-2.jpg  ',
+    status: 'review',
+  },
+  {    
+    violation_id:6,
+    plate_number: '434277',
+    type: 'yellow lane',
+    latitude: 26.152973,
+    longitude: 50.474248,
+    timestamp:"2024-04-27 15:45:30",
+    image_key: '1_91343852333181838466725509209824728477661450287_25_1-2.jpg  ',
+    status: 'rejected',
+  },
    ])
+
    .execute();
- 
   }
